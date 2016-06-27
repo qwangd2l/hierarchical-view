@@ -1,0 +1,143 @@
+<html>
+<head>
+	<title>D2L Hierarchical View Web Component</title>
+	<script src="https://s.brightspace.com/lib/webcomponentsjs/0.7.21/webcomponents.min.js"></script>
+	<script>
+		//window.Polymer = window.Polymer || {};
+		//window.Polymer.dom = 'shadow';
+	</script>
+	<link rel="stylesheet" href="demo-styles.css">
+	<link rel="import" href="../d2l-hierarchical-view.html">
+	<style>
+		#view1, #view2a, #view2b, #view3 {
+			border-radius: 0.3rem;
+			box-sizing: border-box;
+			font-size: 1.5rem;
+		}
+		#view1 > div, #view2a > div, #view2b > div, #view3 {
+			box-sizing: border-box;
+			padding: 1rem;
+		}
+		#view1 {
+			background-color: #c0dfd9;
+			border: 1px solid black;
+			border-radius: 0.3rem;
+		}
+		#view2a {
+			background-color: #e9ece5;
+		}
+		#view2b {
+			background-color: #b3c2bf;
+		}
+		#view3 {
+			background-color: #3b3a36;
+			color: white;
+		}
+		#view1 > div {
+			min-height: 200px;
+		}
+		#view2a > div {
+			min-height: 400px;
+		}
+		#view2b > div {
+			min-height: 200px;
+		}
+		#view3 > div {
+			min-height: 300px;
+		}
+		.content {
+			border: 1px dotted black;
+			font-size: 1rem;
+		}
+		.buttons {
+			float: right;
+		}
+	</style>
+</head>
+<body unresolved>
+
+	<h1>d2l-hierarchical-view web component</h1>
+
+	<h2>Configuration</h2>
+
+	<div style="margin-bottom: 0.75rem;">
+		<button onclick="toggleRTL();">Toggle RTL</button>
+		<button onclick="appendContent('view1');">Append Content</button>
+		<button onclick="showSubView('view3');">Show Deep View</button>
+	</div>
+
+	<h2>Component</h2>
+
+	<div style="width: 600px;">
+
+	<d2l-hierarchical-view id="view1">
+		<div>
+			view 1
+			<div class="buttons">
+				<button onclick="showSubView('view2a');">view 2a</button>
+				<button onclick="showSubView('view2b');">view 2b</button>
+			</div>
+			<div>
+				<d2l-hierarchical-view id="view2a">
+					<div>
+						view 2a
+						<div class="buttons">
+							<button onclick="showParentView('view2a');">view 1 (parent)</button>
+							<button onclick="showSubView('view3');">view 3</button>
+						</div>
+						<d2l-hierarchical-view id="view3">
+							<div>
+								view 3
+								<div class="buttons">
+									<button onclick="showParentView('view3');">view 2a (parent)</button>
+								</div>
+							</div>
+						</d2l-hierarchical-view>
+					</div>
+				</d2l-hierarchical-view>
+				<d2l-hierarchical-view id="view2b">
+					<div>
+						view 2b
+						<div class="buttons">
+							<button onclick="showParentView('view2b');">view 1 (parent)</button>
+						</div>
+					</div>
+				</d2l-hierarchical-view>
+		</div>
+	</d2l-hierarchical-view>
+
+	</div>
+
+	<script>
+
+		function showSubView(id) {
+			var view = document.getElementById(id);
+			view.show();
+		}
+
+		function showParentView(id) {
+			var view = document.getElementById(id);
+			view.hide();
+		}
+
+		function appendContent(id) {
+			var content = document.createElement('p');
+			content.className = 'content';
+			content.appendChild(document.createTextNode('Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.'));
+			var view = document.getElementById(id);
+			var activeView = view.__getActiveView();
+			Polymer.dom(activeView).appendChild(content);
+		}
+
+		function toggleRTL() {
+			var isRTL = (document.body.dir === 'rtl');
+			if (isRTL) {
+				document.body.dir = 'ltr';
+			} else {
+				document.body.dir = 'rtl';
+			}
+		}
+
+	</script>
+</body>
+</html>

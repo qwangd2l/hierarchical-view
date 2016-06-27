@@ -1,0 +1,319 @@
+<link rel="import" href="../polymer/polymer.html">
+
+<dom-module id="d2l-hierarchical-view-styles">
+	<template>
+		<style>
+
+			:host {
+				box-sizing: border-box;
+				display: inline-block;
+				position: relative;
+				left: 0;
+				overflow: hidden;
+				width: 100%;
+				-webkit-transition: height 300ms linear;
+				transition: height 300ms linear;
+			}
+			:host([child-view]),
+			:host ::content [child-view] {
+				display: none;
+				position: absolute;
+				top: 0;
+				left: 100%;
+			}
+			:host([shown]),
+			:host ::content [shown] {
+				display: inline-block;
+			}
+			.d2l-hierarchical-view-content.d2l-child-view-show {
+				-webkit-animation: show-child-view-animation forwards 300ms linear;
+				animation: show-child-view-animation 300ms forwards linear;
+			}
+			.d2l-hierarchical-view-content.d2l-child-view-hide {
+				-webkit-animation: hide-child-view-animation forwards 300ms linear;
+				animation: hide-child-view-animation 300ms forwards linear;
+			}
+
+			@keyframes show-child-view-animation {
+				0% { transform: translate(0,0); }
+				100% { transform: translate(-100%,0); }
+			}
+			@-webkit-keyframes show-child-view-animation {
+				0% { -webkit-transform: translate(0,0); }
+				100% { -webkit-transform: translate(-100%,0); }
+			}
+			@keyframes hide-child-view-animation {
+				0% { transform: translate(-100%,0); }
+				100% { transform: translate(0,0); }
+			}
+			@-webkit-keyframes hide-child-view-animation {
+				0% { -webkit-transform: translate(-100%,0); }
+				100% { -webkit-transform: translate(0,0); }
+			}
+
+		</style>
+	</template>
+</dom-module>
+<script>
+(function() {
+	'use strict';
+
+	/** @polymerBehavior */
+	var HierarchicalViewBehavior = {
+
+		properties: {
+			shown: {
+				type: Boolean,
+				reflectToAttribute: true,
+				value: false
+			},
+			childView: {
+				type: Boolean,
+				reflectToAttribute: true,
+				value: false
+			},
+			isAttached: {
+				type: Boolean
+			},
+			isHierarchicalView: {
+				type: Boolean,
+				readOnly: true,
+				value: true
+			}
+		},
+
+		__keyCodes: {
+			ESCAPE: 27
+		},
+
+		listeners: {
+			'keydown': '__onKeyDown',
+			'hide-start': '__onHideStart',
+			'show-start': '__onShowStart',
+			'resize': '__onResize'
+		},
+
+		ready: function() {
+			this.__focusCapture = this.__focusCapture.bind(this);
+			Polymer.dom(this).observeNodes(this.__observeNodes);
+		},
+
+		attached: function() {
+
+			this.isAttached = true;
+
+			var parentNode = Polymer.dom(this).parentNode;
+			while (parentNode) {
+				if (parentNode.isHierarchicalView) {
+					this.childView = true;
+					break;
+				}
+				parentNode = Polymer.dom(parentNode).parentNode;
+			}
+
+			this.async(function() {
+				this.__autoSize(this);
+			}.bind(this));
+
+			if (!this.childView) {
+				this.addEventListener('focus', this.__focusCapture, true);
+			}
+
+		},
+
+		detached: function() {
+
+			this.isAttached = false;
+
+			if (!this.childView) {
+				this.removeEventListener('focus', this.__focusCapture, true);
+			}
+		},
+
+		hide: function(sourceTarget) {
+			if (!sourceTarget) {
+				sourceTarget = this;
+			}
+			this.fire('hide-start', {isSource: sourceTarget === this, sourceTarget: sourceTarget});
+		},
+
+		resize: function() {
+			this.__fireResize();
+		},
+
+		show: function(sourceTarget) {
+			this.shown = true;
+			if (!sourceTarget) {
+				sourceTarget = this;
+			}
+			this.fire('show-start', {isSource: sourceTarget === this, sourceTarget: sourceTarget});
+		},
+
+		__autoSize: function(view) {
+
+			if (this.childView) {
+				return;
+			}
+
+			var rect;
+			if (view === this) {
+				rect = this.$$('.d2l-hierarchical-view-content').getBoundingClientRect();
+			} else {
+				rect = view.getBoundingClientRect();
+			}
+			this.style.height = rect.height + 'px';
+
+		},
+
+		__fireShowComplete: function() {
+			this.fire('show-complete');
+		},
+
+		__fireHideComplete: function() {
+			this.fire('hide-complete');
+		},
+
+		__fireResize: function() {
+			var content = this.$$('.d2l-hierarchical-view-content');
+			this.fire('resize', content.getBoundingClientRect());
+		},
+
+		__focusCapture: function(e) {
+
+			var parentView = this.__getParentView(e);
+			if (!parentView.__isActive()) {
+				var activeView = this.__getActiveView();
+				if (activeView.focus) {
+					activeView.focus();
+				}
+			}
+
+		},
+
+		__getActiveView: function() {
+			var rootView = this.__getRootView();
+			var childViews = Polymer.dom(rootView).querySelectorAll('[child-view][shown]');
+			if (!childViews || childViews.length === 0) {
+				return this;
+			}
+			for (var i = 0; i < childViews.length; i++) {
+				var childView = childViews[i];
+				if (childView.__isActive()) {
+					return childView;
+				}
+			}
+		},
+
+		__getParentView: function(e) {
+			var path = e.path;
+			for (var i = 1; i < e.path.length; i++) {
+				if (path[i].isHierarchicalView) {
+					return path[i];
+				}
+			}
+		},
+
+		__getRootView: function() {
+			if (!this.childView) {
+				return this;
+			}
+			var parentNode = Polymer.dom(this).parentNode;
+			while (parentNode) {
+				if (parentNode.isHierarchicalView && !parentNode.childView) {
+					return parentNode;
+				}
+				parentNode = Polymer.dom(parentNode).parentNode;
+			}
+		},
+
+		__isActive: function() {
+			var content = this.$$('.d2l-hierarchical-view-content');
+			if (this.childView && !this.shown) {
+				return false;
+			} else {
+				return !content.classList.contains('d2l-child-view-show');
+			}
+		},
+
+		__observeNodes: function() {
+			if (this.isAttached && this.__getActiveView() === this) {
+				this.__fireResize();
+			}
+		},
+
+		__onHideStart: function(e) {
+
+			var rootTarget = Polymer.dom(e).rootTarget;
+			if (rootTarget === this || !rootTarget.isHierarchicalView) {
+				return;
+			}
+
+			var parentView = this.__getParentView(e);
+			if (parentView === this) {
+				var content = this.$$('.d2l-hierarchical-view-content');
+
+				var animationEnd = function(e) {
+					content.removeEventListener('animationend', animationEnd);
+					Polymer.dom(e).rootTarget.classList.remove('d2l-child-view-hide');
+					rootTarget.shown = false;
+					rootTarget.__fireHideComplete();
+				}.bind(this);
+				content.addEventListener('animationend', animationEnd);
+
+				content.classList.add('d2l-child-view-hide');
+				content.classList.remove('d2l-child-view-show');
+
+				this.fire('resize', content.getBoundingClientRect());
+			}
+
+		},
+
+		__onKeyDown: function(e) {
+			if (this.childView && e.keyCode === this.__keyCodes.ESCAPE) {
+				e.stopPropagation();
+				this.hide();
+				return;
+			}
+		},
+
+		__onResize: function(e) {
+			this.style.height = e.detail.height + 'px';
+		},
+
+		__onShowStart: function(e) {
+
+			var rootTarget = Polymer.dom(e).rootTarget;
+			if (rootTarget === this || !rootTarget.isHierarchicalView) {
+				return;
+			}
+
+			if (this.childView && !this.shown) {
+				/* deep link scenario */
+				this.show(e.detail.sourceTarget);
+			}
+			var content = this.$$('.d2l-hierarchical-view-content');
+
+			if (e.detail.isSource && this.__getParentView(e) === this) {
+				var animationEnd = function() {
+					content.removeEventListener('animationend', animationEnd);
+					e.detail.sourceTarget.__fireShowComplete(e.detail);
+				}.bind(this);
+				content.addEventListener('animationend', animationEnd);
+			}
+
+			content.classList.add('d2l-child-view-show');
+
+			if (e.detail.isSource && this.__getParentView(e) === this) {
+				this.fire('resize', e.detail.sourceTarget.getBoundingClientRect());
+			}
+
+		}
+
+	};
+
+	window.D2L = window.D2L || {};
+	window.D2L.PolymerBehaviors = window.D2L.PolymerBehaviors || {};
+	/** @polymerBehavior */
+	window.D2L.PolymerBehaviors.HierarchicalViewBehavior = [HierarchicalViewBehavior];
+})();
+</script>
