@@ -33,18 +33,6 @@
 			background-color: #3b3a36;
 			color: white;
 		}
-		#view1 > div {
-			min-height: 200px;
-		}
-		#view2a > div {
-			min-height: 400px;
-		}
-		#view2b > div {
-			min-height: 200px;
-		}
-		#view3 > div {
-			min-height: 300px;
-		}
 		.content {
 			border: 1px dotted black;
 			font-size: 1rem;
@@ -68,10 +56,10 @@
 
 	<h2>Component</h2>
 
-	<div style="width: 600px;">
+	<div style="width: 60%;">
 
 	<d2l-hierarchical-view id="view1">
-		<div>
+		<div style="min-height: 200px;">
 			view 1
 			<div class="buttons">
 				<button onclick="showSubView('view2a');">view 2a</button>
@@ -79,14 +67,14 @@
 			</div>
 			<div>
 				<d2l-hierarchical-view id="view2a">
-					<div>
+					<div style="min-height: 400px;">
 						view 2a
 						<div class="buttons">
 							<button onclick="showParentView('view2a');">view 1 (parent)</button>
 							<button onclick="showSubView('view3');">view 3</button>
 						</div>
 						<d2l-hierarchical-view id="view3">
-							<div>
+							<div style="min-height: 300px;">
 								view 3
 								<div class="buttons">
 									<button onclick="showParentView('view3');">view 2a (parent)</button>
@@ -96,7 +84,7 @@
 					</div>
 				</d2l-hierarchical-view>
 				<d2l-hierarchical-view id="view2b">
-					<div>
+					<div style="min-height: 200px;">
 						view 2b
 						<div class="buttons">
 							<button onclick="showParentView('view2b');">view 1 (parent)</button>
