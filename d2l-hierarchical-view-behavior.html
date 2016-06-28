@@ -304,7 +304,7 @@
 			content.classList.add('d2l-child-view-show');
 
 			if (e.detail.isSource && this.__getParentView(e) === this) {
-				this.fire('resize', e.detail.sourceTarget.getBoundingClientRect());
+				e.detail.sourceTarget.__fireResize();
 			}
 
 		}
