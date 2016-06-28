@@ -71,20 +71,20 @@ view.resize();
 
 #### Events
 
-The hierarchical views raise show/hide events when showing or hiding children.
+The hierarchical views raise show/hide events when showing or hiding child views.
 
 ```javascript
 // triggered when child view will be shown (before animation begins)
-view.addEventListener('show-start', ()=> { ... });
+view.addEventListener('show-start', () => { ... });
 
 // triggered when child view is shown (when animation ends)
-view.addEventListener('show-complete', ()=> { ... });
+view.addEventListener('show-complete', () => { ... });
 
 // triggered when child view will be hidden (before animation begins)
-view.addEventListener('hide-start', ()=> { ... });
+view.addEventListener('hide-start', () => { ... });
 
 // triggered when child view is hidden (when animation ends)
-view.addEventListener('hide-complete', ()=> { ... });
+view.addEventListener('hide-complete', () => { ... });
 ```
 
 ### Behavior
