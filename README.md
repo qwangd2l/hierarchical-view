@@ -49,6 +49,8 @@ child.show();
 child.hide();
 ```
 
+Note: If the root view component is initially not visible when attached to the DOM, it is necessary to call its `resize` method when it is made visible.
+
 ### Behavior
 
 To implement a custom hierarchical view component, import the `d2l-hierarchical-view-behavior.html` behavior, include the `d2l-hierarchical-view-styles` styles, and define a template containing the `d2l-hierarchical-view-content` class.  For example, see  [d2l-hierarchical-view](https://github.com/Brightspace/d2l-hierarchical-view-ui/blob/master/d2l-hierarchical-view.html).
