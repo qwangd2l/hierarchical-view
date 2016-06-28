@@ -183,7 +183,7 @@
 
 		__focusCapture: function(e) {
 
-			var parentView = this.__getParentView(e);
+			var parentView = this.__getParentViewFromEvent(e);
 			if (!parentView.__isActive()) {
 				var activeView = this.__getActiveView();
 				if (activeView.focus) {
@@ -207,7 +207,7 @@
 			}
 		},
 
-		__getParentView: function(e) {
+		__getParentViewFromEvent: function(e) {
 			var path = e.path;
 			for (var i = 1; i < e.path.length; i++) {
 				if (path[i].isHierarchicalView) {
@@ -251,7 +251,7 @@
 				return;
 			}
 
-			var parentView = this.__getParentView(e);
+			var parentView = this.__getParentViewFromEvent(e);
 			if (parentView === this) {
 				var content = this.$$('.d2l-hierarchical-view-content');
 
@@ -296,7 +296,7 @@
 			}
 			var content = this.$$('.d2l-hierarchical-view-content');
 
-			if (e.detail.isSource && this.__getParentView(e) === this) {
+			if (e.detail.isSource && this.__getParentViewFromEvent(e) === this) {
 				var animationEnd = function() {
 					content.removeEventListener('animationend', animationEnd);
 					e.detail.sourceTarget.__fireShowComplete(e.detail);
@@ -306,7 +306,7 @@
 
 			content.classList.add('d2l-child-view-show');
 
-			if (e.detail.isSource && this.__getParentView(e) === this) {
+			if (e.detail.isSource && this.__getParentViewFromEvent(e) === this) {
 				e.detail.sourceTarget.__fireViewResize();
 			}
 
