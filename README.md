@@ -17,6 +17,8 @@ Include the [webcomponents.js](http://webcomponents.org/polyfills/) "lite" polyf
 
 ### Component
 
+#### HTML
+
 ```html
 <head>
 	<script src="https://s.brightspace.com/lib/webcomponentsjs/0.7.21/webcomponents-lite.min.js"></script>
@@ -39,7 +41,9 @@ Nest the `d2l-hierarchical-view` elements on your page:
 </body>
 ```
 
-Use the `show` and `hide` methods on child views to controls visibility:
+#### Methods
+
+Use the `show` and `hide` methods on child views to control visibility:
 
 ```javascript
 // to show child (hiding parent)
@@ -49,7 +53,39 @@ child.show();
 child.hide();
 ```
 
-Note: If the root view component is initially not visible when attached to the DOM, it is necessary to call its `resize` method when it is made visible.
+Other helpful methods:
+
+```javascript
+// get the currently active hierarchical view
+view.getActiveView();
+
+// get the root hierarchical view
+view.getRootView();
+
+// whether the specified hierarchical view is the active view
+view.isActive();
+
+// force resize of the hierarchical view (useful if initially not displayed when attached)
+view.resize();
+```
+
+#### Events
+
+The hierarchical views raise show/hide events when showing or hiding child views.
+
+```javascript
+// triggered when child view will be shown (before animation begins)
+view.addEventListener('show-start', () => { ... });
+
+// triggered when child view is shown (when animation ends)
+view.addEventListener('show-complete', () => { ... });
+
+// triggered when child view will be hidden (before animation begins)
+view.addEventListener('hide-start', () => { ... });
+
+// triggered when child view is hidden (when animation ends)
+view.addEventListener('hide-complete', () => { ... });
+```
 
 ### Behavior
 

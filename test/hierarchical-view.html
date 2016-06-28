@@ -33,7 +33,7 @@
 				view1 = document.getElementById('view1');
 				view2 = document.getElementById('view2');
 				var resizeCount = 0;
-				view1.addEventListener('resize', function(e) {
+				view1.addEventListener('view-resize', function(e) {
 					resizeCount += 1;
 					if (resizeCount === 2) {
 						done();
@@ -42,24 +42,24 @@
 			});
 
 			it('root view is initially active', function() {
-				expect(view1.__isActive()).to.be.true;
-				expect(view1.__getRootView()).to.equal(view1);
-				expect(view1.__getActiveView()).to.equal(view1);
+				expect(view1.isActive()).to.be.true;
+				expect(view1.getRootView()).to.equal(view1);
+				expect(view1.getActiveView()).to.equal(view1);
 			});
 
 			it('child view is initially inactive', function() {
-				expect(view2.__isActive()).to.be.false;
+				expect(view2.isActive()).to.be.false;
 			});
 
 			it('resize on root view triggers resize event', function(done) {
-				view1.addEventListener('resize', function(e) {
+				view1.addEventListener('view-resize', function(e) {
 					done();
 				});
 				view1.resize();
 			});
 
 			it('resize on child view triggers resize event', function(done) {
-				view1.addEventListener('resize', function() {
+				view1.addEventListener('view-resize', function() {
 					done();
 				});
 				view2.resize();
@@ -67,7 +67,7 @@
 
 			it('resizes when light-dom is mutated', function(done) {
 				var initialHeight = view1.getBoundingClientRect().height;
-				view1.addEventListener('resize', function(e) {
+				view1.addEventListener('view-resize', function(e) {
 					setTimeout(function() {
 						expect(view1.getBoundingClientRect().height).to.above(initialHeight);
 						done();
@@ -95,8 +95,8 @@
 
 			it('show on child view makes it active view', function(done) {
 				view1.addEventListener('show-complete', function() {
-					expect(view1.__isActive()).to.be.false;
-					expect(view2.__isActive()).to.be.true;
+					expect(view1.isActive()).to.be.false;
+					expect(view2.isActive()).to.be.true;
 					done();
 				});
 				view2.show();
@@ -116,7 +116,7 @@
 			it('hide on child view triggers hide-complete event', function(done) {
 				view1.addEventListener('show-complete', function() {
 					view1.addEventListener('hide-complete', function() {
-						expect(view1.__isActive()).to.be.true;
+						expect(view1.isActive()).to.be.true;
 						done();
 					});
 					view2.hide();
@@ -127,7 +127,7 @@
 			it('pressing Escape in child view context hides view', function(done) {
 				view1.addEventListener('show-complete', function() {
 					view1.addEventListener('hide-complete', function() {
-						expect(view1.__isActive()).to.be.true;
+						expect(view1.isActive()).to.be.true;
 						done();
 					});
 					var view2_content = document.getElementById('view2_content');
