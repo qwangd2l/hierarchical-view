@@ -90,11 +90,12 @@
 			'keydown': '__onKeyDown',
 			'hide-start': '__onHideStart',
 			'show-start': '__onShowStart',
-			'resize': '__onResize'
+			'view-resize': '__onViewResize'
 		},
 
 		ready: function() {
 			this.__focusCapture = this.__focusCapture.bind(this);
+			this.__onWindowResize = this.__onWindowResize.bind(this);
 			Polymer.dom(this).observeNodes(this.__observeNodes);
 		},
 
@@ -117,6 +118,7 @@
 
 			if (!this.childView) {
 				this.addEventListener('focus', this.__focusCapture, true);
+				window.addEventListener('resize', this.__onWindowResize);
 			}
 
 		},
@@ -127,6 +129,7 @@
 
 			if (!this.childView) {
 				this.removeEventListener('focus', this.__focusCapture, true);
+				window.removeEventListener('resize', this.__onWindowResize);
 			}
 		},
 
@@ -138,7 +141,7 @@
 		},
 
 		resize: function() {
-			this.__fireResize();
+			this.__fireViewResize();
 		},
 
 		show: function(sourceTarget) {
@@ -173,9 +176,9 @@
 			this.fire('hide-complete');
 		},
 
-		__fireResize: function() {
+		__fireViewResize: function() {
 			var content = this.$$('.d2l-hierarchical-view-content');
-			this.fire('resize', content.getBoundingClientRect());
+			this.fire('view-resize', content.getBoundingClientRect());
 		},
 
 		__focusCapture: function(e) {
@@ -237,7 +240,7 @@
 
 		__observeNodes: function() {
 			if (this.isAttached && this.__getActiveView() === this) {
-				this.__fireResize();
+				this.__fireViewResize();
 			}
 		},
 
@@ -263,7 +266,7 @@
 				content.classList.add('d2l-child-view-hide');
 				content.classList.remove('d2l-child-view-show');
 
-				this.fire('resize', content.getBoundingClientRect());
+				this.fire('view-resize', content.getBoundingClientRect());
 			}
 
 		},
@@ -276,7 +279,7 @@
 			}
 		},
 
-		__onResize: function(e) {
+		__onViewResize: function(e) {
 			this.style.height = e.detail.height + 'px';
 		},
 
@@ -304,9 +307,16 @@
 			content.classList.add('d2l-child-view-show');
 
 			if (e.detail.isSource && this.__getParentView(e) === this) {
-				this.fire('resize', e.detail.sourceTarget.getBoundingClientRect());
+				e.detail.sourceTarget.__fireViewResize();
 			}
 
+		},
+
+		__onWindowResize: function() {
+			var view = this.__getActiveView();
+			if (view) {
+				view.__fireViewResize();
+			}
 		}
 
 	};
