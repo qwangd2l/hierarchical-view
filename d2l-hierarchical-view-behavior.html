@@ -133,11 +133,47 @@
 			}
 		},
 
+		getActiveView: function() {
+			var rootView = this.getRootView();
+			var childViews = Polymer.dom(rootView).querySelectorAll('[child-view][shown]');
+			if (!childViews || childViews.length === 0) {
+				return this;
+			}
+			for (var i = 0; i < childViews.length; i++) {
+				var childView = childViews[i];
+				if (childView.isActive()) {
+					return childView;
+				}
+			}
+		},
+
+		getRootView: function() {
+			if (!this.childView) {
+				return this;
+			}
+			var parentNode = Polymer.dom(this).parentNode;
+			while (parentNode) {
+				if (parentNode.isHierarchicalView && !parentNode.childView) {
+					return parentNode;
+				}
+				parentNode = Polymer.dom(parentNode).parentNode;
+			}
+		},
+
 		hide: function(sourceTarget) {
 			if (!sourceTarget) {
 				sourceTarget = this;
 			}
 			this.fire('hide-start', {isSource: sourceTarget === this, sourceTarget: sourceTarget});
+		},
+
+		isActive: function() {
+			var content = this.$$('.d2l-hierarchical-view-content');
+			if (this.childView && !this.shown) {
+				return false;
+			} else {
+				return !content.classList.contains('d2l-child-view-show');
+			}
 		},
 
 		resize: function() {
@@ -184,27 +220,13 @@
 		__focusCapture: function(e) {
 
 			var parentView = this.__getParentViewFromEvent(e);
-			if (!parentView.__isActive()) {
-				var activeView = this.__getActiveView();
+			if (!parentView.isActive()) {
+				var activeView = this.getActiveView();
 				if (activeView.focus) {
 					activeView.focus();
 				}
 			}
 
-		},
-
-		__getActiveView: function() {
-			var rootView = this.__getRootView();
-			var childViews = Polymer.dom(rootView).querySelectorAll('[child-view][shown]');
-			if (!childViews || childViews.length === 0) {
-				return this;
-			}
-			for (var i = 0; i < childViews.length; i++) {
-				var childView = childViews[i];
-				if (childView.__isActive()) {
-					return childView;
-				}
-			}
 		},
 
 		__getParentViewFromEvent: function(e) {
@@ -216,30 +238,8 @@
 			}
 		},
 
-		__getRootView: function() {
-			if (!this.childView) {
-				return this;
-			}
-			var parentNode = Polymer.dom(this).parentNode;
-			while (parentNode) {
-				if (parentNode.isHierarchicalView && !parentNode.childView) {
-					return parentNode;
-				}
-				parentNode = Polymer.dom(parentNode).parentNode;
-			}
-		},
-
-		__isActive: function() {
-			var content = this.$$('.d2l-hierarchical-view-content');
-			if (this.childView && !this.shown) {
-				return false;
-			} else {
-				return !content.classList.contains('d2l-child-view-show');
-			}
-		},
-
 		__observeNodes: function() {
-			if (this.isAttached && this.__getActiveView() === this) {
+			if (this.isAttached && this.getActiveView() === this) {
 				this.__fireViewResize();
 			}
 		},
@@ -313,7 +313,7 @@
 		},
 
 		__onWindowResize: function() {
-			var view = this.__getActiveView();
+			var view = this.getActiveView();
 			if (view) {
 				view.__fireViewResize();
 			}
