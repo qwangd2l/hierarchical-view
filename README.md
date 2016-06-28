@@ -43,7 +43,7 @@ Nest the `d2l-hierarchical-view` elements on your page:
 
 #### Methods
 
-Use the `show` and `hide` methods on child views to controls visibility:
+Use the `show` and `hide` methods on child views to control visibility:
 
 ```javascript
 // to show child (hiding parent)
