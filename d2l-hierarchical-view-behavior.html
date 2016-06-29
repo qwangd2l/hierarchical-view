@@ -160,11 +160,11 @@
 			}
 		},
 
-		hide: function(sourceTarget) {
-			if (!sourceTarget) {
-				sourceTarget = this;
+		hide: function(sourceView) {
+			if (!sourceView) {
+				sourceView = this;
 			}
-			this.fire('hide-start', {isSource: sourceTarget === this, sourceTarget: sourceTarget});
+			this.fire('hide-start', {isSource: sourceView === this, sourceView: sourceView});
 		},
 
 		isActive: function() {
@@ -180,12 +180,12 @@
 			this.__fireViewResize();
 		},
 
-		show: function(sourceTarget) {
+		show: function(sourceView) {
 			this.shown = true;
-			if (!sourceTarget) {
-				sourceTarget = this;
+			if (!sourceView) {
+				sourceView = this;
 			}
-			this.fire('show-start', {isSource: sourceTarget === this, sourceTarget: sourceTarget});
+			this.fire('show-start', {isSource: sourceView === this, sourceView: sourceView});
 		},
 
 		__autoSize: function(view) {
@@ -292,14 +292,14 @@
 
 			if (this.childView && !this.shown) {
 				/* deep link scenario */
-				this.show(e.detail.sourceTarget);
+				this.show(e.detail.sourceView);
 			}
 			var content = this.$$('.d2l-hierarchical-view-content');
 
 			if (e.detail.isSource && this.__getParentViewFromEvent(e) === this) {
 				var animationEnd = function() {
 					content.removeEventListener('animationend', animationEnd);
-					e.detail.sourceTarget.__fireShowComplete(e.detail);
+					e.detail.sourceView.__fireShowComplete(e.detail);
 				}.bind(this);
 				content.addEventListener('animationend', animationEnd);
 			}
@@ -307,7 +307,7 @@
 			content.classList.add('d2l-child-view-show');
 
 			if (e.detail.isSource && this.__getParentViewFromEvent(e) === this) {
-				e.detail.sourceTarget.__fireViewResize();
+				e.detail.sourceView.__fireViewResize();
 			}
 
 		},

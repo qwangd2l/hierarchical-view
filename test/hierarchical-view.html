@@ -80,7 +80,7 @@
 
 			it('show on child view triggers show-start event', function(done) {
 				view1.addEventListener('show-start', function(e) {
-					expect(e.detail.sourceTarget).to.equal(view2);
+					expect(e.detail.sourceView).to.equal(view2);
 					done();
 				});
 				view2.show();
@@ -105,7 +105,7 @@
 			it('hide on child view triggers hide-start event', function(done) {
 				view1.addEventListener('show-complete', function() {
 					view1.addEventListener('hide-start', function(e) {
-					expect(e.detail.sourceTarget).to.equal(view2);
+					expect(e.detail.sourceView).to.equal(view2);
 						done();
 					});
 					view2.hide();
