@@ -205,11 +205,11 @@
 		},
 
 		__fireShowComplete: function() {
-			this.fire('show-complete');
+			this.fire('show-complete', { activeView: this.getActiveView() });
 		},
 
 		__fireHideComplete: function() {
-			this.fire('hide-complete');
+			this.fire('hide-complete', { activeView: this.getActiveView() });
 		},
 
 		__fireViewResize: function() {
