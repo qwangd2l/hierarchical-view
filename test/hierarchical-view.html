@@ -32,13 +32,11 @@
 				fixture('views');
 				view1 = document.getElementById('view1');
 				view2 = document.getElementById('view2');
-				var resizeCount = 0;
-				view1.addEventListener('view-resize', function(e) {
-					resizeCount += 1;
-					if (resizeCount === 2) {
-						done();
-					}
-				});
+				var initHandler = function() {
+					view1.removeEventListener('view-resize', initHandler);
+					done();
+				};
+				view1.addEventListener('view-resize', initHandler);
 			});
 
 			it('root view is initially active', function() {

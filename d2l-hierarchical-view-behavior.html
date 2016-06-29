@@ -137,7 +137,7 @@
 			var rootView = this.getRootView();
 			var childViews = Polymer.dom(rootView).querySelectorAll('[child-view][shown]');
 			if (!childViews || childViews.length === 0) {
-				return this;
+				return rootView;
 			}
 			for (var i = 0; i < childViews.length; i++) {
 				var childView = childViews[i];
