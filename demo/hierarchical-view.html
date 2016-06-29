@@ -98,6 +98,22 @@
 
 	<script>
 
+		window.addEventListener('WebComponentsReady', function(e) {
+			var focusFirstButton = function(e) {
+				var button = e.detail.activeView.querySelector('button');
+				if (button) {
+					button.focus();
+				}
+			};
+			var rootView = document.getElementById('view1');
+			rootView.addEventListener('show-complete', function(e) {
+				focusFirstButton(e);
+			});
+			rootView.addEventListener('hide-complete', function(e) {
+				focusFirstButton(e);
+			});
+		});
+
 		function showSubView(id) {
 			var view = document.getElementById(id);
 			view.show();
