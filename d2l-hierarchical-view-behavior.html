@@ -230,8 +230,8 @@
 		},
 
 		__getParentViewFromEvent: function(e) {
-			var path = e.path;
-			for (var i = 1; i < e.path.length; i++) {
+			var path = Polymer.dom(e).path;
+			for (var i = 1; i < path.length; i++) {
 				if (path[i].isHierarchicalView) {
 					return path[i];
 				}

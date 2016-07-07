@@ -3,8 +3,11 @@
 	<title>D2L Hierarchical View Web Component</title>
 	<script src="https://s.brightspace.com/lib/webcomponentsjs/0.7.21/webcomponents.min.js"></script>
 	<script>
-		//window.Polymer = window.Polymer || {};
-		//window.Polymer.dom = 'shadow';
+		var shadow = (window.location.search.indexOf('dom=shadow') > -1);
+		if (shadow) {
+			window.Polymer = window.Polymer || {};
+			window.Polymer.dom = 'shadow';
+		}
 	</script>
 	<link rel="stylesheet" href="demo-styles.css">
 	<link rel="import" href="../d2l-hierarchical-view.html">
