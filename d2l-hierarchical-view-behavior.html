@@ -1,4 +1,5 @@
 <link rel="import" href="../polymer/polymer.html">
+<link rel="import" href="../d2l-polymer-behaviors/d2l-dom.html">
 
 <dom-module id="d2l-hierarchical-view-styles">
 	<template>
@@ -181,11 +182,44 @@
 		},
 
 		show: function(sourceView) {
-			this.shown = true;
-			if (!sourceView) {
-				sourceView = this;
+
+			var _show = function(view) {
+				view.shown = true;
+				view.fire('show-start', {
+					isSource: sourceView === this,
+					sourceView: sourceView
+				});
+			}.bind(this);
+
+			var _hideChildViews = function(view) {
+				var childViews = Polymer.dom(view).querySelectorAll('[child-view][shown]');
+				for (var i = 0; i < childViews.length; i++) {
+					childViews[i].hide();
+				}
+				this.resize();
+			}.bind(this);
+
+			if (sourceView) {
+				_show(this);
+				return;
 			}
-			this.fire('show-start', {isSource: sourceView === this, sourceView: sourceView});
+
+			sourceView = this;
+			var activeView = this.getActiveView();
+
+			if (D2L.Dom.isComposedAncestor(activeView, this)) {
+				_show(this);
+				return;
+			}
+
+			if (D2L.Dom.isComposedAncestor(this, activeView)) {
+				_hideChildViews(this);
+				return;
+			}
+
+			_hideChildViews(this.getRootView());
+			_show(this);
+
 		},
 
 		__autoSize: function(view) {
