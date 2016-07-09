@@ -104,13 +104,13 @@
 
 			this.isAttached = true;
 
-			var parentNode = Polymer.dom(this).parentNode;
-			while (parentNode) {
-				if (parentNode.isHierarchicalView) {
-					this.childView = true;
-					break;
-				}
-				parentNode = Polymer.dom(parentNode).parentNode;
+			var parentView = D2L.Dom.findComposedAncestor(
+				Polymer.dom(this).parentNode,
+				function(node) { return node.isHierarchicalView; }
+			);
+
+			if (parentView) {
+				this.childView = true;
 			}
 
 			this.async(function() {
@@ -152,13 +152,13 @@
 			if (!this.childView) {
 				return this;
 			}
-			var parentNode = Polymer.dom(this).parentNode;
-			while (parentNode) {
-				if (parentNode.isHierarchicalView && !parentNode.childView) {
-					return parentNode;
+			var rootView = D2L.Dom.findComposedAncestor(
+				Polymer.dom(this).parentNode,
+				function(node) {
+					return node.isHierarchicalView && !node.childView;
 				}
-				parentNode = Polymer.dom(parentNode).parentNode;
-			}
+			);
+			return rootView;
 		},
 
 		hide: function(sourceView) {
