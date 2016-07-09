@@ -12,12 +12,12 @@
 	<link rel="stylesheet" href="demo-styles.css">
 	<link rel="import" href="../d2l-hierarchical-view.html">
 	<style>
-		#view1, #view2a, #view2b, #view3 {
+		#view1, #view2a, #view2b, #view3, #view4 {
 			border-radius: 0.3rem;
 			box-sizing: border-box;
 			font-size: 1.5rem;
 		}
-		#view1 > div, #view2a > div, #view2b > div, #view3 {
+		#view1 > div, #view2a > div, #view2b > div, #view3 > div, #view4 > div {
 			box-sizing: border-box;
 			padding: 1rem;
 		}
@@ -36,6 +36,13 @@
 			background-color: #3b3a36;
 			color: white;
 		}
+		#view4 {
+			background-color: orange;
+			color: white;
+		}
+		#config_buttons > button {
+			margin-right: 0.5rem;
+		}
 		.content {
 			border: 1px dotted black;
 			font-size: 1rem;
@@ -51,10 +58,9 @@
 
 	<h2>Configuration</h2>
 
-	<div style="margin-bottom: 0.75rem;">
+	<div id="config_buttons" style="margin-bottom: 0.75rem;">
 		<button onclick="toggleRTL();">Toggle RTL</button>
 		<button onclick="appendContent('view1');">Append Content</button>
-		<button onclick="showSubView('view3');">Show Deep View</button>
 	</div>
 
 	<h2>Component</h2>
@@ -81,7 +87,16 @@
 								view 3
 								<div class="buttons">
 									<button onclick="showParentView('view3');">view 2a (parent)</button>
+									<button onclick="showSubView('view4');">view 4</button>
 								</div>
+								<d2l-hierarchical-view id="view4">
+									<div style="min-height: 300px;">
+										view 4
+										<div class="buttons">
+											<button onclick="showParentView('view4');">view 3 (parent)</button>
+										</div>
+									</div>
+								</d2l-hierarchical-view>
 							</div>
 						</d2l-hierarchical-view>
 					</div>
@@ -115,6 +130,17 @@
 			rootView.addEventListener('hide-complete', function(e) {
 				focusFirstButton(e);
 			});
+			var config_buttons = document.getElementById('config_buttons');
+			var views = document.querySelectorAll('d2l-hierarchical-view');
+			for (var i=0; i<views.length; i++) {
+				var button = document.createElement('button');
+				button.appendChild(document.createTextNode('show ' + views[i].id));
+				button.setAttribute('data-view-id', views[i].id);
+				button.addEventListener('click', function(e) {
+					document.getElementById(e.target.getAttribute('data-view-id')).show();
+				});
+				config_buttons.appendChild(button);
+			}
 		});
 
 		function showSubView(id) {
