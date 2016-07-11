@@ -13,10 +13,11 @@
 
 		<test-fixture id="views">
 			<template>
+				<a id="previous_focusable" tabindex="0"></a>
 				<d2l-hierarchical-view id="view1">
-					<div id="view1_content">view 1<div>
+					<div id="view1_content" tabindex="0">view 1</div>
 					<d2l-hierarchical-view id="view2">
-						<div id="view2_content">view 2</div>
+						<div id="view2_content" tabindex="0">view 2</div>
 					</d2l-hierarchical-view>
 				</d2l-hierarchical-view>
 			</template>
@@ -134,7 +135,7 @@
 				view2.show();
 			});
 
-			it('child view is delegated focus when active view', function(done) {
+			it('applies focus using focus override if provided', function(done) {
 				view1.addEventListener('show-complete', function() {
 					var mockFocusHandler = function() {
 						done();
@@ -143,6 +144,25 @@
 
 					var view1_content = document.getElementById('view1_content');
 					MockInteractions.focus(view1_content);
+				});
+				view2.show();
+			});
+
+			it('applies focus to next focusable element in active view', function(done) {
+				view1.addEventListener('show-complete', function() {
+					MockInteractions.focus(document.getElementById('view1_content'));
+					expect(document.activeElement).to.equal(document.getElementById('view2_content'));
+					done();
+				});
+				view2.show();
+			});
+
+			it('applies focus to previous focusable element outside hierarchy', function(done) {
+				view1.addEventListener('show-complete', function() {
+					document.getElementById('view2_content').focus();
+					document.getElementById('view1_content').focus();
+					expect(document.activeElement).to.equal(document.getElementById('previous_focusable'));
+					done();
 				});
 				view2.show();
 			});
