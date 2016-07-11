@@ -1,5 +1,6 @@
 <link rel="import" href="../polymer/polymer.html">
 <link rel="import" href="../d2l-polymer-behaviors/d2l-dom.html">
+<link rel="import" href="../d2l-polymer-behaviors/d2l-dom-focus.html">
 
 <dom-module id="d2l-hierarchical-view-styles">
 	<template>
@@ -87,6 +88,8 @@
 			ESCAPE: 27
 		},
 
+		__nativeFocus: null,
+
 		listeners: {
 			'keydown': '__onKeyDown',
 			'hide-start': '__onHideStart',
@@ -95,7 +98,9 @@
 		},
 
 		ready: function() {
+			this.__nativeFocus = document.createElement('div').focus;
 			this.__focusCapture = this.__focusCapture.bind(this);
+			this.__focusOutCapture = this.__focusOutCapture.bind(this);
 			this.__onWindowResize = this.__onWindowResize.bind(this);
 			Polymer.dom(this).observeNodes(this.__observeNodes);
 		},
@@ -119,6 +124,7 @@
 
 			if (!this.childView) {
 				this.addEventListener('focus', this.__focusCapture, true);
+				this.addEventListener('focusout', this.__focusOutCapture, true);
 				window.addEventListener('resize', this.__onWindowResize);
 			}
 
@@ -130,6 +136,7 @@
 
 			if (!this.childView) {
 				this.removeEventListener('focus', this.__focusCapture, true);
+				this.removeEventListener('focusout', this.__focusOutCapture, true);
 				window.removeEventListener('resize', this.__onWindowResize);
 			}
 		},
@@ -254,10 +261,58 @@
 		__focusCapture: function(e) {
 
 			var parentView = this.__getParentViewFromEvent(e);
-			if (!parentView.isActive()) {
+
+			if (parentView.isActive()) {
+				return;
+			}
+
+			var relatedTarget = e.relatedTarget;
+			var focusableElement;
+
+			var getNextFocusable = function() {
 				var activeView = this.getActiveView();
-				if (activeView.focus) {
-					activeView.focus();
+				if (this.__nativeFocus === activeView.focus) {
+					return D2L.Dom.Focus.getNextFocusable(activeView);
+				} else {
+					return activeView;
+				}
+			}.bind(this);
+
+			if (relatedTarget) {
+				if (!D2L.Dom.isComposedAncestor(this, relatedTarget)) {
+					focusableElement = getNextFocusable();
+				} else {
+					focusableElement = D2L.Dom.Focus.getPreviousFocusable(this);
+				}
+			} else {
+
+				// handle focus for ie
+				if (this.__focusPrevious) {
+					this.__focusPrevious = false;
+					focusableElement = D2L.Dom.Focus.getPreviousFocusable(this);
+				} else {
+					focusableElement = getNextFocusable();
+				}
+
+			}
+
+			if (focusableElement) {
+				focusableElement.focus();
+			}
+
+		},
+
+		__focusPrevious: false,
+
+		__focusOutCapture: function(e) {
+
+			// focus tracking required since ie only supports relatedTarget on focusin/focusout
+			var relatedTarget = e.relatedTarget;
+			var activeView = this.getActiveView();
+			this.__focusPrevious = false;
+			if (D2L.Dom.isComposedAncestor(activeView, e.target)) {
+				if (D2L.Dom.isComposedAncestor(this, relatedTarget)) {
+					this.__focusPrevious = true;
 				}
 			}
 
