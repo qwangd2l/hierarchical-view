@@ -92,6 +92,17 @@
 				view2.show();
 			});
 
+			it('show data argument is passed to show-start and show-complete event handlers', function(done) {
+				view1.addEventListener('show-start', function(e) {
+					expect(e.detail.data.some).to.equal('thing');
+				});
+				view1.addEventListener('show-complete', function(e) {
+					expect(e.detail.data.some).to.equal('thing');
+					done();
+				});
+				view2.show({ some: 'thing' });
+			});
+
 			it('show on child view makes it active view', function(done) {
 				view1.addEventListener('show-complete', function() {
 					expect(view1.isActive()).to.be.false;
@@ -119,6 +130,20 @@
 						done();
 					});
 					view2.hide();
+				});
+				view2.show();
+			});
+
+			it('hide data argument is passed to hide-start and hide-complete event handlers', function(done) {
+				view1.addEventListener('show-complete', function() {
+					view1.addEventListener('hide-start', function(e) {
+						expect(e.detail.data.some).to.equal('thing');
+					});
+					view1.addEventListener('hide-complete', function(e) {
+						expect(e.detail.data.some).to.equal('thing');
+						done();
+					});
+					view2.hide({ some: 'thing' });
 				});
 				view2.show();
 			});
