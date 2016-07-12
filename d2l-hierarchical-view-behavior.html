@@ -168,11 +168,15 @@
 			return rootView;
 		},
 
-		hide: function(sourceView) {
+		hide: function(data, sourceView) {
 			if (!sourceView) {
 				sourceView = this;
 			}
-			this.fire('hide-start', {isSource: sourceView === this, sourceView: sourceView});
+			this.fire('hide-start', {
+				data: data,
+				isSource: sourceView === this,
+				sourceView: sourceView
+			});
 		},
 
 		isActive: function() {
@@ -188,26 +192,27 @@
 			this.__fireViewResize();
 		},
 
-		show: function(sourceView) {
+		show: function(data, sourceView) {
 
-			var _show = function(view) {
+			var _show = function(data, view) {
 				view.shown = true;
 				view.fire('show-start', {
 					isSource: sourceView === this,
+					data: data,
 					sourceView: sourceView
 				});
 			}.bind(this);
 
-			var _hideChildViews = function(view) {
+			var _hideChildViews = function(data, view) {
 				var childViews = Polymer.dom(view).querySelectorAll('[child-view][shown]');
 				for (var i = 0; i < childViews.length; i++) {
-					childViews[i].hide();
+					childViews[i].hide(data);
 				}
 				this.resize();
 			}.bind(this);
 
 			if (sourceView) {
-				_show(this);
+				_show(data, this);
 				return;
 			}
 
@@ -215,17 +220,17 @@
 			var activeView = this.getActiveView();
 
 			if (D2L.Dom.isComposedAncestor(activeView, this)) {
-				_show(this);
+				_show(data, this);
 				return;
 			}
 
 			if (D2L.Dom.isComposedAncestor(this, activeView)) {
-				_hideChildViews(this);
+				_hideChildViews(data, this);
 				return;
 			}
 
-			_hideChildViews(this.getRootView());
-			_show(this);
+			_hideChildViews(data, this.getRootView());
+			_show(data, this);
 
 		},
 
@@ -245,12 +250,12 @@
 
 		},
 
-		__fireShowComplete: function() {
-			this.fire('show-complete', { activeView: this.getActiveView() });
+		__fireShowComplete: function(data) {
+			this.fire('show-complete', { activeView: this.getActiveView(), data: data });
 		},
 
-		__fireHideComplete: function() {
-			this.fire('hide-complete', { activeView: this.getActiveView() });
+		__fireHideComplete: function(data) {
+			this.fire('hide-complete', { activeView: this.getActiveView(), data: data });
 		},
 
 		__fireViewResize: function() {
@@ -344,11 +349,12 @@
 			if (parentView === this) {
 				var content = this.$$('.d2l-hierarchical-view-content');
 
+				var data = e.detail.data;
 				var animationEnd = function(e) {
 					content.removeEventListener('animationend', animationEnd);
 					Polymer.dom(e).rootTarget.classList.remove('d2l-child-view-hide');
 					rootTarget.shown = false;
-					rootTarget.__fireHideComplete();
+					rootTarget.__fireHideComplete(data);
 				}.bind(this);
 				content.addEventListener('animationend', animationEnd);
 
@@ -381,14 +387,14 @@
 
 			if (this.childView && !this.shown) {
 				/* deep link scenario */
-				this.show(e.detail.sourceView);
+				this.show(e.detail.data, e.detail.sourceView);
 			}
 			var content = this.$$('.d2l-hierarchical-view-content');
 
 			if (e.detail.isSource && this.__getParentViewFromEvent(e) === this) {
 				var animationEnd = function() {
 					content.removeEventListener('animationend', animationEnd);
-					e.detail.sourceView.__fireShowComplete(e.detail);
+					e.detail.sourceView.__fireShowComplete(e.detail.data, e.detail);
 				}.bind(this);
 				content.addEventListener('animationend', animationEnd);
 			}
