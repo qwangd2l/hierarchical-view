@@ -259,6 +259,11 @@
 		},
 
 		__fireViewResize: function() {
+			if (!this.isActive()) {
+				var view = this.getActiveView();
+				view.resize();
+				return;
+			}
 			var content = this.$$('.d2l-hierarchical-view-content');
 			this.fire('view-resize', content.getBoundingClientRect());
 		},
