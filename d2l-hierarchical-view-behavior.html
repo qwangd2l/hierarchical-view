@@ -16,6 +16,9 @@
 				-webkit-transition: height 300ms linear;
 				transition: height 300ms linear;
 			}
+			:host-context([no-animate-height]) {
+					transition: none;
+			}
 			:host([child-view]),
 			:host ::content [child-view] {
 				display: none;
