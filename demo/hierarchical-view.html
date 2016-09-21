@@ -1,15 +1,8 @@
 <html>
 <head>
-	<title>D2L Hierarchical View Web Component</title>
+	<title>d2l-hierarchical-view</title>
 	<script src="https://s.brightspace.com/lib/webcomponentsjs/0.7.21/webcomponents.min.js"></script>
-	<script>
-		var shadow = (window.location.search.indexOf('dom=shadow') > -1);
-		if (shadow) {
-			window.Polymer = window.Polymer || {};
-			window.Polymer.dom = 'shadow';
-		}
-	</script>
-	<link rel="stylesheet" href="demo-styles.css">
+	<link rel="import" href="../../d2l-demo-template/d2l-demo-template.html">
 	<link rel="import" href="../d2l-hierarchical-view.html">
 	<style>
 		#view1, #view2a, #view2b, #view3, #view4 {
@@ -57,71 +50,72 @@
 </head>
 <body unresolved>
 
-	<h1>d2l-hierarchical-view web component</h1>
+	<d2l-demo-template title="d2l-hierarchical-view">
 
-	<h2>Configuration</h2>
+		<div id="config_buttons" class="d2l-demo-actions">
+			<button onclick="appendContent('view1');">Append Content</button>
+		</div>
 
-	<div id="config_buttons" style="margin-bottom: 0.75rem;">
-		<button onclick="toggleRTL();">Toggle RTL</button>
-		<button onclick="appendContent('view1');">Append Content</button>
-	</div>
+		<div class="d2l-demo-fixture">
 
-	<h2>Component</h2>
+			<div style="width: 60%;">
 
-	<div style="width: 60%;">
-
-		<d2l-hierarchical-view id="view1">
-			<div style="min-height: 200px;">
-				<div class="buttons">
-					<button onclick="showSubView('view2a');">view 2a</button>
-					<button onclick="showSubView('view2b');">view 2b</button>
-				</div>
-				view 1
-				<div class="info">min-height: 200</div>
-				<div>
-					<d2l-hierarchical-view id="view2a">
-						<div style="min-height: 400px;">
-							<div class="buttons">
-								<button onclick="showParentView('view2a');">view 1 (parent)</button>
-								<button onclick="showSubView('view3');">view 3</button>
-							</div>
-							view 2a
-							<div class="info">min-height: 400</div>
-							<d2l-hierarchical-view id="view3">
-								<div style="min-height: 300px;">
+				<d2l-hierarchical-view id="view1">
+					<div style="min-height: 200px;">
+						<div class="buttons">
+							<button onclick="showSubView('view2a');">view 2a</button>
+							<button onclick="showSubView('view2b');">view 2b</button>
+						</div>
+						view 1
+						<div class="info">min-height: 200</div>
+						<div>
+							<d2l-hierarchical-view id="view2a">
+								<div style="min-height: 400px;">
 									<div class="buttons">
-										<button onclick="showParentView('view3');">view 2a (parent)</button>
-										<button onclick="showSubView('view4');">view 4</button>
+										<button onclick="showParentView('view2a');">view 1 (parent)</button>
+										<button onclick="showSubView('view3');">view 3</button>
 									</div>
-									view 3
-									<div class="info">min-height: 300</div>
-									<d2l-hierarchical-view id="view4">
+									view 2a
+									<div class="info">min-height: 400</div>
+									<d2l-hierarchical-view id="view3">
 										<div style="min-height: 300px;">
 											<div class="buttons">
-												<button onclick="showParentView('view4');">view 3 (parent)</button>
+												<button onclick="showParentView('view3');">view 2a (parent)</button>
+												<button onclick="showSubView('view4');">view 4</button>
 											</div>
-											view 4
+											view 3
 											<div class="info">min-height: 300</div>
+											<d2l-hierarchical-view id="view4">
+												<div style="min-height: 300px;">
+													<div class="buttons">
+														<button onclick="showParentView('view4');">view 3 (parent)</button>
+													</div>
+													view 4
+													<div class="info">min-height: 300</div>
+												</div>
+											</d2l-hierarchical-view>
 										</div>
 									</d2l-hierarchical-view>
 								</div>
 							</d2l-hierarchical-view>
+							<d2l-hierarchical-view id="view2b">
+								<div style="min-height: 200px;">
+									<div class="buttons">
+										<button onclick="showParentView('view2b');">view 1 (parent)</button>
+									</div>
+									view 2b
+									<div class="info">min-height: 200</div>
+								</div>
+							</d2l-hierarchical-view>
 						</div>
-					</d2l-hierarchical-view>
-					<d2l-hierarchical-view id="view2b">
-						<div style="min-height: 200px;">
-							<div class="buttons">
-								<button onclick="showParentView('view2b');">view 1 (parent)</button>
-							</div>
-							view 2b
-							<div class="info">min-height: 200</div>
-						</div>
-					</d2l-hierarchical-view>
-				</div>
-			</div>
-		</d2l-hierarchical-view>
+					</div>
+				</d2l-hierarchical-view>
 
-	</div>
+			</div>
+
+		</div>
+
+	</d2l-demo-template>
 
 	<script>
 
@@ -169,15 +163,6 @@
 			var view = document.getElementById(id);
 			var activeView = view.getActiveView();
 			Polymer.dom(activeView).appendChild(content);
-		}
-
-		function toggleRTL() {
-			var isRTL = (document.body.dir === 'rtl');
-			if (isRTL) {
-				document.body.dir = 'ltr';
-			} else {
-				document.body.dir = 'rtl';
-			}
 		}
 
 	</script>
