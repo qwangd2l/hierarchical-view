@@ -75,16 +75,16 @@ The hierarchical views raise show/hide events when showing or hiding child views
 
 ```javascript
 // triggered when child view will be shown (before animation begins)
-view.addEventListener('show-start', () => { ... });
+view.addEventListener('d2l-hierarchical-view-show-start', () => { ... });
 
 // triggered when child view is shown (when animation ends)
-view.addEventListener('show-complete', () => { ... });
+view.addEventListener('d2l-hierarchical-view-show-complete', () => { ... });
 
 // triggered when child view will be hidden (before animation begins)
-view.addEventListener('hide-start', () => { ... });
+view.addEventListener('d2l-hierarchical-view-hide-start', () => { ... });
 
 // triggered when child view is hidden (when animation ends)
-view.addEventListener('hide-complete', () => { ... });
+view.addEventListener('d2l-hierarchical-view-hide-complete', () => { ... });
 ```
 
 ### Behavior
