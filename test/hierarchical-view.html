@@ -37,7 +37,7 @@
 					view1.removeEventListener('view-resize', initHandler);
 					done();
 				};
-				view1.addEventListener('view-resize', initHandler);
+				view1.addEventListener('d2l-hierarchical-view-resize', initHandler);
 			});
 
 			it('root view is initially active', function() {
@@ -51,14 +51,14 @@
 			});
 
 			it('resize on root view triggers resize event', function(done) {
-				view1.addEventListener('view-resize', function(e) {
+				view1.addEventListener('d2l-hierarchical-view-resize', function(e) {
 					done();
 				});
 				view1.resize();
 			});
 
 			it('resize on child view triggers resize event', function(done) {
-				view1.addEventListener('view-resize', function() {
+				view1.addEventListener('d2l-hierarchical-view-resize', function() {
 					done();
 				});
 				view2.resize();
@@ -66,7 +66,7 @@
 
 			it('resizes when light-dom is mutated', function(done) {
 				var initialHeight = view1.getBoundingClientRect().height;
-				view1.addEventListener('view-resize', function(e) {
+				view1.addEventListener('d2l-hierarchical-view-resize', function(e) {
 					setTimeout(function() {
 						expect(view1.getBoundingClientRect().height).to.above(initialHeight);
 						done();
@@ -78,7 +78,7 @@
 			});
 
 			it('show on child view triggers show-start event', function(done) {
-				view1.addEventListener('show-start', function(e) {
+				view1.addEventListener('d2l-hierarchical-view-show-start', function(e) {
 					expect(e.detail.sourceView).to.equal(view2);
 					done();
 				});
@@ -86,17 +86,17 @@
 			});
 
 			it('show on child view triggers show-complete event', function(done) {
-				view1.addEventListener('show-complete', function() {
+				view1.addEventListener('d2l-hierarchical-view-show-complete', function() {
 					done();
 				});
 				view2.show();
 			});
 
 			it('show data argument is passed to show-start and show-complete event handlers', function(done) {
-				view1.addEventListener('show-start', function(e) {
+				view1.addEventListener('d2l-hierarchical-view-show-start', function(e) {
 					expect(e.detail.data.some).to.equal('thing');
 				});
-				view1.addEventListener('show-complete', function(e) {
+				view1.addEventListener('d2l-hierarchical-view-show-complete', function(e) {
 					expect(e.detail.data.some).to.equal('thing');
 					done();
 				});
@@ -104,7 +104,7 @@
 			});
 
 			it('show on child view makes it active view', function(done) {
-				view1.addEventListener('show-complete', function() {
+				view1.addEventListener('d2l-hierarchical-view-show-complete', function() {
 					expect(view1.isActive()).to.be.false;
 					expect(view2.isActive()).to.be.true;
 					done();
@@ -113,8 +113,8 @@
 			});
 
 			it('hide on child view triggers hide-start event', function(done) {
-				view1.addEventListener('show-complete', function() {
-					view1.addEventListener('hide-start', function(e) {
+				view1.addEventListener('d2l-hierarchical-view-show-complete', function() {
+					view1.addEventListener('d2l-hierarchical-view-hide-start', function(e) {
 					expect(e.detail.sourceView).to.equal(view2);
 						done();
 					});
@@ -124,8 +124,8 @@
 			});
 
 			it('hide on child view triggers hide-complete event', function(done) {
-				view1.addEventListener('show-complete', function() {
-					view1.addEventListener('hide-complete', function() {
+				view1.addEventListener('d2l-hierarchical-view-show-complete', function() {
+					view1.addEventListener('d2l-hierarchical-view-hide-complete', function() {
 						expect(view1.isActive()).to.be.true;
 						done();
 					});
@@ -135,11 +135,11 @@
 			});
 
 			it('hide data argument is passed to hide-start and hide-complete event handlers', function(done) {
-				view1.addEventListener('show-complete', function() {
-					view1.addEventListener('hide-start', function(e) {
+				view1.addEventListener('d2l-hierarchical-view-show-complete', function() {
+					view1.addEventListener('d2l-hierarchical-view-hide-start', function(e) {
 						expect(e.detail.data.some).to.equal('thing');
 					});
-					view1.addEventListener('hide-complete', function(e) {
+					view1.addEventListener('d2l-hierarchical-view-hide-complete', function(e) {
 						expect(e.detail.data.some).to.equal('thing');
 						done();
 					});
@@ -149,8 +149,8 @@
 			});
 
 			it('pressing Escape in child view context hides view', function(done) {
-				view1.addEventListener('show-complete', function() {
-					view1.addEventListener('hide-complete', function() {
+				view1.addEventListener('d2l-hierarchical-view-show-complete', function() {
+					view1.addEventListener('d2l-hierarchical-view-hide-complete', function() {
 						expect(view1.isActive()).to.be.true;
 						done();
 					});
@@ -161,7 +161,7 @@
 			});
 
 			it('applies focus using focus override if provided', function(done) {
-				view1.addEventListener('show-complete', function() {
+				view1.addEventListener('d2l-hierarchical-view-show-complete', function() {
 					var mockFocusHandler = function() {
 						done();
 					};
@@ -174,7 +174,7 @@
 			});
 
 			it('applies focus to next focusable element in active view', function(done) {
-				view1.addEventListener('show-complete', function() {
+				view1.addEventListener('d2l-hierarchical-view-show-complete', function() {
 					MockInteractions.focus(document.getElementById('view1_content'));
 					expect(document.activeElement).to.equal(document.getElementById('view2_content'));
 					done();
@@ -183,7 +183,7 @@
 			});
 
 			it('applies focus to previous focusable element outside hierarchy', function(done) {
-				view1.addEventListener('show-complete', function() {
+				view1.addEventListener('d2l-hierarchical-view-show-complete', function() {
 					document.getElementById('view2_content').focus();
 					document.getElementById('view1_content').focus();
 					expect(document.activeElement).to.equal(document.getElementById('previous_focusable'));

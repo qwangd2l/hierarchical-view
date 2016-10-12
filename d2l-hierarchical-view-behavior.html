@@ -95,9 +95,9 @@
 
 		listeners: {
 			'keydown': '__onKeyDown',
-			'hide-start': '__onHideStart',
-			'show-start': '__onShowStart',
-			'view-resize': '__onViewResize'
+			'd2l-hierarchical-view-hide-start': '__onHideStart',
+			'd2l-hierarchical-view-show-start': '__onShowStart',
+			'd2l-hierarchical-view-resize': '__onViewResize'
 		},
 
 		ready: function() {
@@ -175,7 +175,7 @@
 			if (!sourceView) {
 				sourceView = this;
 			}
-			this.fire('hide-start', {
+			this.fire('d2l-hierarchical-view-hide-start', {
 				data: data,
 				isSource: sourceView === this,
 				sourceView: sourceView
@@ -199,7 +199,7 @@
 
 			var _show = function(data, view) {
 				view.shown = true;
-				view.fire('show-start', {
+				view.fire('d2l-hierarchical-view-show-start', {
 					isSource: sourceView === this,
 					data: data,
 					sourceView: sourceView
@@ -254,11 +254,11 @@
 		},
 
 		__fireShowComplete: function(data) {
-			this.fire('show-complete', { activeView: this.getActiveView(), data: data });
+			this.fire('d2l-hierarchical-view-show-complete', { activeView: this.getActiveView(), data: data });
 		},
 
 		__fireHideComplete: function(data) {
-			this.fire('hide-complete', { activeView: this.getActiveView(), data: data });
+			this.fire('d2l-hierarchical-view-hide-complete', { activeView: this.getActiveView(), data: data });
 		},
 
 		__fireViewResize: function() {
@@ -268,7 +268,7 @@
 				return;
 			}
 			var content = this.$$('.d2l-hierarchical-view-content');
-			this.fire('view-resize', content.getBoundingClientRect());
+			this.fire('d2l-hierarchical-view-resize', content.getBoundingClientRect());
 		},
 
 		__focusCapture: function(e) {
@@ -369,7 +369,7 @@
 				content.classList.add('d2l-child-view-hide');
 				content.classList.remove('d2l-child-view-show');
 
-				this.fire('view-resize', content.getBoundingClientRect());
+				this.fire('d2l-hierarchical-view-resize', content.getBoundingClientRect());
 			}
 
 		},
