@@ -69,13 +69,11 @@
 		properties: {
 			shown: {
 				type: Boolean,
-				reflectToAttribute: true,
-				value: false
+				reflectToAttribute: true
 			},
 			childView: {
 				type: Boolean,
-				reflectToAttribute: true,
-				value: false
+				reflectToAttribute: true
 			},
 			isAttached: {
 				type: Boolean
@@ -105,7 +103,6 @@
 			this.__focusCapture = this.__focusCapture.bind(this);
 			this.__focusOutCapture = this.__focusOutCapture.bind(this);
 			this.__onWindowResize = this.__onWindowResize.bind(this);
-			Polymer.dom(this).observeNodes(this.__observeNodes);
 		},
 
 		attached: function() {
@@ -125,11 +122,15 @@
 				this.__autoSize(this);
 			}.bind(this));
 
-			if (!this.childView) {
-				this.addEventListener('focus', this.__focusCapture, true);
-				this.addEventListener('focusout', this.__focusOutCapture, true);
-				window.addEventListener('resize', this.__onWindowResize);
-			}
+			Polymer.RenderStatus.afterNextRender(this, function() {
+				Polymer.dom(this).observeNodes(this.__observeNodes);
+
+				if (!this.childView) {
+					this.addEventListener('focus', this.__focusCapture, true);
+					this.addEventListener('focusout', this.__focusOutCapture, true);
+					window.addEventListener('resize', this.__onWindowResize);
+				}
+			}.bind(this));
 
 		},
 
@@ -243,13 +244,18 @@
 				return;
 			}
 
-			var rect;
-			if (view === this) {
-				rect = this.$$('.d2l-hierarchical-view-content').getBoundingClientRect();
-			} else {
-				rect = view.getBoundingClientRect();
-			}
-			this.style.height = rect.height + 'px';
+			requestAnimationFrame(function() {
+				if (view.offsetParent === null) {
+					return;
+				}
+				var rect;
+				if (view === this) {
+					rect = this.$$('.d2l-hierarchical-view-content').getBoundingClientRect();
+				} else {
+					rect = view.getBoundingClientRect();
+				}
+				this.style.height = rect.height + 'px';
+			}.bind(this));
 
 		},
 
