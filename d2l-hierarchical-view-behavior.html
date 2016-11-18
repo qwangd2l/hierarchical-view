@@ -130,7 +130,7 @@
 					this.addEventListener('focusout', this.__focusOutCapture, true);
 					window.addEventListener('resize', this.__onWindowResize);
 				}
-			});
+			}.bind(this));
 
 		},
 
