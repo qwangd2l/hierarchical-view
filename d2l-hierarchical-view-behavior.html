@@ -244,13 +244,18 @@
 				return;
 			}
 
-			var rect;
-			if (view === this) {
-				rect = this.$$('.d2l-hierarchical-view-content').getBoundingClientRect();
-			} else {
-				rect = view.getBoundingClientRect();
-			}
-			this.style.height = rect.height + 'px';
+			requestAnimationFrame(function() {
+				if (view.offsetParent === null) {
+					return;
+				}
+				var rect;
+				if (view === this) {
+					rect = this.$$('.d2l-hierarchical-view-content').getBoundingClientRect();
+				} else {
+					rect = view.getBoundingClientRect();
+				}
+				this.style.height = rect.height + 'px';
+			}.bind(this));
 
 		},
 
