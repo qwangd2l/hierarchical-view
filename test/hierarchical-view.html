@@ -34,7 +34,7 @@
 				view1 = document.getElementById('view1');
 				view2 = document.getElementById('view2');
 				var initHandler = function() {
-					view1.removeEventListener('view-resize', initHandler);
+					view1.removeEventListener('d2l-hierarchical-view-resize', initHandler);
 					done();
 				};
 				view1.addEventListener('d2l-hierarchical-view-resize', initHandler);
