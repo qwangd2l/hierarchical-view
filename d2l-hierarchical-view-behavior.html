@@ -19,15 +19,13 @@
 			:host-context([no-animate-height]) {
 					transition: none;
 			}
-			:host([child-view]),
-			:host ::content [child-view] {
+			:host([child-view]) {
 				display: none;
 				position: absolute;
 				top: 0;
 				left: 100%;
 			}
-			:host([shown]),
-			:host ::content [shown] {
+			:host([shown]) {
 				display: inline-block;
 			}
 			.d2l-hierarchical-view-content.d2l-child-view-show {
