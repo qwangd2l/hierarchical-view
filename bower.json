@@ -12,7 +12,7 @@
     "package.json"
   ],
   "dependencies": {
-    "d2l-polymer-behaviors": "~0.0.4",
+    "d2l-polymer-behaviors": "~0.0.5",
     "polymer": "^1.7.0"
   },
   "devDependencies": {
