@@ -13,11 +13,11 @@
 				left: 0;
 				overflow: hidden;
 				width: 100%;
-				-webkit-transition: height 300ms linear;
-				transition: height 300ms linear;
-			}
-			:host-context([no-animate-height]) {
-					transition: none;
+
+				--d2l-hierarchical-view-height-transition: height 300ms linear;
+
+				-webkit-transition: var(--d2l-hierarchical-view-height-transition);
+				transition: var(--d2l-hierarchical-view-height-transition);
 			}
 			:host([child-view]) {
 				display: none;
