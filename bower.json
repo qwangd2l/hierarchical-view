@@ -7,9 +7,12 @@
     "demo",
     "test",
     ".editorconfig",
+    ".eslintrc.json",
     ".gitignore",
     ".travis.yml",
-    "package.json"
+    "package.json",
+    "polymer.json",
+    "wct.conf.json"
   ],
   "dependencies": {
     "d2l-polymer-behaviors": "^1.0.0",
