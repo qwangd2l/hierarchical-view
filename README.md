@@ -22,8 +22,8 @@ Include the [webcomponents.js](http://webcomponents.org/polyfills/) "lite" polyf
 
 ```html
 <head>
-	<script src="../webcomponentsjs/webcomponents-lite.js"></script>
-	<link rel="import" href="../d2l-hierarchical-view/d2l-hierarchical-view.html">
+  <script src="../webcomponentsjs/webcomponents-lite.js"></script>
+  <link rel="import" href="../d2l-hierarchical-view/d2l-hierarchical-view.html">
 </head>
 ```
 
@@ -51,12 +51,12 @@ Nest the `d2l-hierarchical-view` elements on your page.
         font-weight: 400;
         line-height: 1.4rem;
       }
-      #view1, #view2a, #view2b, #view3, #view4 {
+      #view1, #view2a, #view2b, #view3 {
         border-radius: 0.3rem;
         box-sizing: border-box;
         font-size: 1rem;
       }
-      #view1 > div, #view2a > div, #view2b > div, #view3 > div, #view4 > div {
+      #view1 > div, #view2a > div, #view2b > div, #view3 > div {
         box-sizing: border-box;
         padding: 1rem;
       }
@@ -72,10 +72,6 @@ Nest the `d2l-hierarchical-view` elements on your page.
         background-color: #b3c2bf;
       }
       #view3 {
-        background-color: #3b3a36;
-        color: white;
-      }
-      #view4 {
         background-color: orange;
         color: white;
       }
@@ -123,19 +119,9 @@ Nest the `d2l-hierarchical-view` elements on your page.
             <div style="min-height: 300px;">
               <div class="buttons">
                 <button onclick="showParentView('view3');">view 2a (parent)</button>
-                <button onclick="showSubView('view4');">view 4</button>
               </div>
               view 3
               <div class="info">min-height: 300</div>
-              <d2l-hierarchical-view id="view4">
-                <div style="min-height: 300px;">
-                  <div class="buttons">
-                    <button onclick="showParentView('view4');">view 3 (parent)</button>
-                  </div>
-                  view 4
-                  <div class="info">min-height: 300</div>
-                </div>
-              </d2l-hierarchical-view>
             </div>
           </d2l-hierarchical-view>
         </div>
