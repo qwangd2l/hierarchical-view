@@ -51,6 +51,40 @@ Nest the `d2l-hierarchical-view` elements on your page.
         font-weight: 400;
         line-height: 1.4rem;
       }
+      #view1, #view2a, #view2b, #view3, #view4 {
+        border-radius: 0.3rem;
+        box-sizing: border-box;
+        font-size: 1rem;
+      }
+      #view1 > div, #view2a > div, #view2b > div, #view3 > div, #view4 > div {
+        box-sizing: border-box;
+        padding: 1rem;
+      }
+      #view1 {
+        background-color: #c0dfd9;
+        border: 1px solid black;
+        border-radius: 0.3rem;
+      }
+      #view2a {
+        background-color: #e9ece5;
+      }
+      #view2b {
+        background-color: #b3c2bf;
+      }
+      #view3 {
+        background-color: #3b3a36;
+        color: white;
+      }
+      #view4 {
+        background-color: orange;
+        color: white;
+      }
+      .buttons {
+        float: right;
+      }
+      .info {
+        font-size: 0.7rem;
+      }
     </style>
     <script>
       function showSubView(id) {
