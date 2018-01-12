@@ -61,21 +61,66 @@
 (function() {
 	'use strict';
 
+	window.D2L = window.D2L || {};
+	window.D2L.PolymerBehaviors = window.D2L.PolymerBehaviors || {};
+
 	/** @polymerBehavior */
-	var HierarchicalViewBehavior = {
+	D2L.PolymerBehaviors.HierarchicalViewBehavior = {
+
+		/**
+		 * Triggered when child view will be shown (before animation begins).
+		 * @event d2l-hierarchical-view-show-start
+		 * @param {HTMLElement} sourceView The source view that triggered the show.
+		 */
+
+		/**
+		 * Triggered when child view is shown (when animation ends).
+		 * @event d2l-hierarchical-view-show-complete
+		 * @param {HTMLElement} sourceView The source view that triggered the show.
+		 */
+
+		/**
+		 * Triggered when child view will be hidden (before animation begins).
+		 * @event d2l-hierarchical-view-hide-start
+		 * @param {HTMLElement} sourceView The source view that triggered the hide.
+		 */
+
+		/**
+		 * Triggered when child view is hidden (when animation ends).
+		 * @event d2l-hierarchical-view-hide-complete
+		 * @param {HTMLElement} sourceView The source view that triggered the hide.
+		 */
 
 		properties: {
+
+			/**
+			 * Whether the view in the hierarchy is currently displayed. Only one view
+			 * in the hierarchy will have shown=true.
+			 */
 			shown: {
 				type: Boolean,
 				reflectToAttribute: true
 			},
+
+			/**
+			 * Indicates whether the view is a child view. This value is determined at runtime when
+			 * the view is attached to the DOM.  All views are child views except the root view.
+			 */
 			childView: {
 				type: Boolean,
 				reflectToAttribute: true
 			},
+
+			/**
+			 * Indicates the view is currently attached.
+			 */
 			isAttached: {
 				type: Boolean
 			},
+
+			/**
+			 * Indicates the element is a hierarchical view.
+			 */
 			isHierarchicalView: {
 				type: Boolean,
 				readOnly: true,
@@ -143,6 +188,10 @@
 			}
 		},
 
+		/**
+		 * Gets the hierarchical view that is currently shown.
+		 * @return {HTMLElement}
+		 */
 		getActiveView: function() {
 			var rootView = this.getRootView();
 			var childViews = Polymer.dom(rootView).querySelectorAll('[child-view][shown]');
@@ -157,6 +206,10 @@
 			}
 		},
 
+		/**
+		 * Gets the hierarchical view that is at the root.
+		 * @return {HTMLElement}
+		 */
 		getRootView: function() {
 			if (!this.childView) {
 				return this;
@@ -170,6 +223,9 @@
 			return rootView;
 		},
 
+		/**
+		 * Hides the view (showing its parent view). To hide, simply call hide(); on the view.
+		 */
 		hide: function(data, sourceView) {
 			if (!sourceView) {
 				sourceView = this;
@@ -181,6 +237,10 @@
 			});
 		},
 
+		/**
+		 * Determines whether the view is active.
+		 * @return {Boolean}
+		 */
 		isActive: function() {
 			var content = this.$$('.d2l-hierarchical-view-content');
 			if (this.childView && !this.shown) {
@@ -190,10 +250,17 @@
 			}
 		},
 
+		/**
+		 * Forces resize/layout of the view.
+		 * @return {Boolean}
+		 */
 		resize: function() {
 			this.__fireViewResize();
 		},
 
+		/**
+		 * Shows the view (hiding its parent view). To show, simply call show(); on the view.
+		 */
 		show: function(data, sourceView) {
 
 			var _show = function(data, view) {
@@ -428,9 +495,5 @@
 
 	};
 
-	window.D2L = window.D2L || {};
-	window.D2L.PolymerBehaviors = window.D2L.PolymerBehaviors || {};
-	/** @polymerBehavior */
-	window.D2L.PolymerBehaviors.HierarchicalViewBehavior = [HierarchicalViewBehavior];
 })();
 </script>

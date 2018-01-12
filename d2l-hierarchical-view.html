@@ -1,6 +1,13 @@
 <link rel="import" href="../polymer/polymer.html">
 <link rel="import" href="d2l-hierarchical-view-behavior.html">
 
+<!--
+`d2l-hierarchical-view`
+Polymer-based web component for nested views
+
+@demo demo/index.html
+-->
+
 <dom-module id="d2l-hierarchical-view">
 
 	<template>
@@ -15,7 +22,7 @@
 			is: 'd2l-hierarchical-view',
 
 			behaviors: [
-				window.D2L.PolymerBehaviors.HierarchicalViewBehavior
+				D2L.PolymerBehaviors.HierarchicalViewBehavior
 			]
 
 		});
