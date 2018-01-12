@@ -22,24 +22,102 @@ Include the [webcomponents.js](http://webcomponents.org/polyfills/) "lite" polyf
 
 ```html
 <head>
-	<script src="https://s.brightspace.com/lib/webcomponentsjs/0.7.21/webcomponents-lite.min.js"></script>
+	<script src="../webcomponentsjs/webcomponents-lite.js"></script>
 	<link rel="import" href="../d2l-hierarchical-view/d2l-hierarchical-view.html">
 </head>
 ```
 
-Nest the `d2l-hierarchical-view` elements on your page:
+Nest the `d2l-hierarchical-view` elements on your page.
 
+<!---
+```
+<custom-element-demo>
+  <template>
+    <script src="../webcomponentsjs/webcomponents-lite.js"></script>
+    <link rel="import" href="../d2l-typography/d2l-typography.html">
+    <link rel="import" href="d2l-hierarchical-view.html">
+    <custom-style include="d2l-typography">
+      <style is="custom-style" include="d2l-typography"></style>
+    </custom-style>
+    <style>
+      html {
+        font-size: 20px;
+      }
+      body {
+        color: var(--d2l-color-ferrite);
+        font-family: 'Lato', 'Lucida Sans Unicode', 'Lucida Grande', sans-serif;
+        letter-spacing: 0.01rem;
+        font-size: 0.95rem;
+        font-weight: 400;
+        line-height: 1.4rem;
+      }
+    </style>
+    <script>
+      function showSubView(id) {
+        var view = document.getElementById(id);
+        view.show();
+      }
+      function showParentView(id) {
+        var view = document.getElementById(id);
+        view.hide();
+      }
+    </script>
+    <next-code-block></next-code-block>
+  </template>
+</custom-element-demo>
+```
+-->
 ```html
-<body>
-	...
-	<d2l-hierarchical-view>
-		some view
-		<d2l-hierarchical-view id="child">
-			child view
-		</d2l-hierarchical-view>
-	</d2l-hierarchical-view>
-	...
-</body>
+<d2l-hierarchical-view id="view1">
+	<div style="min-height: 200px;">
+		<div class="buttons">
+			<button onclick="showSubView('view2a');">view 2a</button>
+			<button onclick="showSubView('view2b');">view 2b</button>
+		</div>
+		view 1
+		<div class="info">min-height: 200</div>
+		<div>
+			<d2l-hierarchical-view id="view2a">
+				<div style="min-height: 400px;">
+					<div class="buttons">
+						<button onclick="showParentView('view2a');">view 1 (parent)</button>
+						<button onclick="showSubView('view3');">view 3</button>
+					</div>
+					view 2a
+					<div class="info">min-height: 400</div>
+					<d2l-hierarchical-view id="view3">
+						<div style="min-height: 300px;">
+							<div class="buttons">
+								<button onclick="showParentView('view3');">view 2a (parent)</button>
+								<button onclick="showSubView('view4');">view 4</button>
+							</div>
+							view 3
+							<div class="info">min-height: 300</div>
+							<d2l-hierarchical-view id="view4">
+								<div style="min-height: 300px;">
+									<div class="buttons">
+										<button onclick="showParentView('view4');">view 3 (parent)</button>
+									</div>
+									view 4
+									<div class="info">min-height: 300</div>
+								</div>
+							</d2l-hierarchical-view>
+						</div>
+					</d2l-hierarchical-view>
+				</div>
+			</d2l-hierarchical-view>
+			<d2l-hierarchical-view id="view2b">
+				<div style="min-height: 200px;">
+					<div class="buttons">
+						<button onclick="showParentView('view2b');">view 1 (parent)</button>
+					</div>
+					view 2b
+					<div class="info">min-height: 200</div>
+				</div>
+			</d2l-hierarchical-view>
+		</div>
+	</div>
+</d2l-hierarchical-view>
 ```
 
 #### Methods
@@ -92,13 +170,39 @@ view.addEventListener('d2l-hierarchical-view-hide-complete', () => { ... });
 
 To implement a custom hierarchical view component, import the `d2l-hierarchical-view-behavior.html` behavior, include the `d2l-hierarchical-view-styles` styles, and define a template containing the `d2l-hierarchical-view-content` class.  For example, see  [d2l-hierarchical-view](https://github.com/Brightspace/d2l-hierarchical-view-ui/blob/master/d2l-hierarchical-view.html).
 
-### Usage in Production
+## Developing, Testing and Contributing
 
-In production, it's recommended to use a build tool like [Vulcanize](https://github.com/Polymer/vulcanize) to combine all your web components into a single import file. [More from the Polymer Docs: Optimize for Production](https://www.polymer-project.org/1.0/tools/optimize-for-production.html)...
+After cloning the repo, run `npm install` to install dependencies.
 
-## Coding styles
+If you don't have it already, install the [Polymer CLI](https://www.polymer-project.org/2.0/docs/tools/polymer-cli) globally:
 
-See the [VUI Best Practices & Style Guide](https://github.com/Brightspace/valence-ui-docs/wiki/Best-Practices-&-Style-Guide) for information on VUI naming conventions, plus information about the [EditorConfig](http://editorconfig.org) rules used in this repo.
+```shell
+npm install -g polymer-cli
+```
+
+To start a [local web server](https://www.polymer-project.org/2.0/docs/tools/polymer-cli-commands#serve) that hosts the demo page and tests:
+
+```shell
+polymer serve
+```
+
+To lint ([eslint](http://eslint.org/) and [Polymer lint](https://www.polymer-project.org/2.0/docs/tools/polymer-cli-commands#lint)):
+
+```shell
+npm run lint
+```
+
+To run unit tests locally using [Polymer test](https://www.polymer-project.org/2.0/docs/tools/polymer-cli-commands#tests):
+
+```shell
+polymer test --skip-plugin sauce
+```
+
+To lint AND run local unit tests:
+
+```shell
+npm test
+```
 
 [bower-url]: http://bower.io/search/?q=d2l-hierarchical-view
 [bower-image]: https://badge.fury.io/bo/d2l-hierarchical-view.svg
