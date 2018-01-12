@@ -103,54 +103,54 @@ Nest the `d2l-hierarchical-view` elements on your page.
 -->
 ```html
 <d2l-hierarchical-view id="view1">
-	<div style="min-height: 200px;">
-		<div class="buttons">
-			<button onclick="showSubView('view2a');">view 2a</button>
-			<button onclick="showSubView('view2b');">view 2b</button>
-		</div>
-		view 1
-		<div class="info">min-height: 200</div>
-		<div>
-			<d2l-hierarchical-view id="view2a">
-				<div style="min-height: 400px;">
-					<div class="buttons">
-						<button onclick="showParentView('view2a');">view 1 (parent)</button>
-						<button onclick="showSubView('view3');">view 3</button>
-					</div>
-					view 2a
-					<div class="info">min-height: 400</div>
-					<d2l-hierarchical-view id="view3">
-						<div style="min-height: 300px;">
-							<div class="buttons">
-								<button onclick="showParentView('view3');">view 2a (parent)</button>
-								<button onclick="showSubView('view4');">view 4</button>
-							</div>
-							view 3
-							<div class="info">min-height: 300</div>
-							<d2l-hierarchical-view id="view4">
-								<div style="min-height: 300px;">
-									<div class="buttons">
-										<button onclick="showParentView('view4');">view 3 (parent)</button>
-									</div>
-									view 4
-									<div class="info">min-height: 300</div>
-								</div>
-							</d2l-hierarchical-view>
-						</div>
-					</d2l-hierarchical-view>
-				</div>
-			</d2l-hierarchical-view>
-			<d2l-hierarchical-view id="view2b">
-				<div style="min-height: 200px;">
-					<div class="buttons">
-						<button onclick="showParentView('view2b');">view 1 (parent)</button>
-					</div>
-					view 2b
-					<div class="info">min-height: 200</div>
-				</div>
-			</d2l-hierarchical-view>
-		</div>
-	</div>
+  <div style="min-height: 200px;">
+    <div class="buttons">
+      <button onclick="showSubView('view2a');">view 2a</button>
+      <button onclick="showSubView('view2b');">view 2b</button>
+    </div>
+    view 1
+    <div class="info">min-height: 200</div>
+    <div>
+      <d2l-hierarchical-view id="view2a">
+        <div style="min-height: 400px;">
+          <div class="buttons">
+            <button onclick="showParentView('view2a');">view 1 (parent)</button>
+            <button onclick="showSubView('view3');">view 3</button>
+          </div>
+          view 2a
+          <div class="info">min-height: 400</div>
+          <d2l-hierarchical-view id="view3">
+            <div style="min-height: 300px;">
+              <div class="buttons">
+                <button onclick="showParentView('view3');">view 2a (parent)</button>
+                <button onclick="showSubView('view4');">view 4</button>
+              </div>
+              view 3
+              <div class="info">min-height: 300</div>
+              <d2l-hierarchical-view id="view4">
+                <div style="min-height: 300px;">
+                  <div class="buttons">
+                    <button onclick="showParentView('view4');">view 3 (parent)</button>
+                  </div>
+                  view 4
+                  <div class="info">min-height: 300</div>
+                </div>
+              </d2l-hierarchical-view>
+            </div>
+          </d2l-hierarchical-view>
+        </div>
+      </d2l-hierarchical-view>
+      <d2l-hierarchical-view id="view2b">
+        <div style="min-height: 200px;">
+          <div class="buttons">
+            <button onclick="showParentView('view2b');">view 1 (parent)</button>
+          </div>
+          view 2b
+          <div class="info">min-height: 200</div>
+        </div>
+      </d2l-hierarchical-view>
+    </div>
+  </div>
 </d2l-hierarchical-view>
 ```
 
