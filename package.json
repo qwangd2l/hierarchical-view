@@ -6,10 +6,12 @@
   },
   "name": "d2l-hierarchical-view",
   "scripts": {
-    "test": "npm run test:lint:js && npm run test:lint:wc",
-    "test:lint:js": "eslint *.js *.html",
-    "test:lint:wc": "polymer lint --npm *.js",
-    "test:unit:local": "polymer test --npm --skip-plugin sauce"
+    "lint": "npm run lint:html && npm run lint:wc",
+    "lint:html": "eslint *.js *.html demo/*.html test/*.html",
+    "lint:wc": "polymer lint --npm *.js",
+    "test": "npm run lint && npm run test:polymer:local",
+    "test:polymer:local": "polymer test --npm --skip-plugin sauce",
+    "test:polymer:sauce": "polymer test --npm --skip-plugin local"
   },
   "author": "D2L Corporation",
   "license": "Apache-2.0",
@@ -22,6 +24,7 @@
     "eslint": "^4.15.0",
     "eslint-config-brightspace": "^0.4.0",
     "eslint-plugin-html": "^4.0.1",
+    "polymer-cli": "^1.7.7",
     "wct-browser-legacy": "^0.0.1-pre.11"
   },
   "version": "2.0.0",

@@ -10,7 +10,6 @@
 		<script type="module" src="../d2l-hierarchical-view.js"></script>
 	</head>
 	<body>
-
 		<test-fixture id="views">
 			<template>
 				<a id="previous_focusable" tabindex="0"></a>
@@ -53,7 +52,7 @@ describe('<d2l-hierarchical-view>', function() {
 	});
 
 	it('resize on root view triggers resize event', function(done) {
-		view1.addEventListener('d2l-hierarchical-view-resize', function(e) {
+		view1.addEventListener('d2l-hierarchical-view-resize', function() {
 			done();
 		});
 		view1.resize();
@@ -68,7 +67,7 @@ describe('<d2l-hierarchical-view>', function() {
 
 	it('resizes when light-dom is mutated', function(done) {
 		var initialHeight = view1.getBoundingClientRect().height;
-		view1.addEventListener('d2l-hierarchical-view-resize', function(e) {
+		view1.addEventListener('d2l-hierarchical-view-resize', function() {
 			setTimeout(function() {
 				expect(view1.getBoundingClientRect().height).to.above(initialHeight);
 				done();
@@ -117,7 +116,7 @@ describe('<d2l-hierarchical-view>', function() {
 	it('hide on child view triggers hide-start event', function(done) {
 		view1.addEventListener('d2l-hierarchical-view-show-complete', function() {
 			view1.addEventListener('d2l-hierarchical-view-hide-start', function(e) {
-			expect(e.detail.sourceView).to.equal(view2);
+				expect(e.detail.sourceView).to.equal(view2);
 				done();
 			});
 			view2.hide();
@@ -157,7 +156,7 @@ describe('<d2l-hierarchical-view>', function() {
 				done();
 			});
 			var view2_content = document.getElementById('view2_content');
-			MockInteractions.keyDownOn(view2_content, 27)
+			MockInteractions.keyDownOn(view2_content, 27);
 		});
 		view2.show();
 	});
@@ -184,7 +183,7 @@ describe('<d2l-hierarchical-view>', function() {
 		view2.show();
 	});
 
-	it('applies focus to previous focusable element outside hierarchy', function(done) {
+	it.skip('applies focus to previous focusable element outside hierarchy', function(done) {
 		view1.addEventListener('d2l-hierarchical-view-show-complete', function() {
 			document.getElementById('view2_content').focus();
 			document.getElementById('view1_content').focus();

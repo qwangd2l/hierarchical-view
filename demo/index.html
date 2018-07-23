@@ -74,7 +74,7 @@ document.body.appendChild($_documentContainer.content);
 			<h3>Hierarchical View</h3>
 
 			<div id="config_buttons">
-				<button onclick="appendContent('view1');">Append Content</button>
+				<button id="btn-append-content">Append Content</button>
 			</div>
 
 			<demo-snippet>
@@ -82,8 +82,8 @@ document.body.appendChild($_documentContainer.content);
 					<d2l-hierarchical-view id="view1">
 						<div style="min-height: 200px;">
 							<div class="buttons">
-								<button onclick="showSubView('view2a');">view 2a</button>
-								<button onclick="showSubView('view2b');">view 2b</button>
+								<button id="btn-view-2a">view 2a</button>
+								<button id="btn-view-2b">view 2b</button>
 							</div>
 							view 1
 							<div class="info">min-height: 200</div>
@@ -92,22 +92,22 @@ document.body.appendChild($_documentContainer.content);
 									<div style="min-height: 400px;">
 										<div class="buttons">
 											<button onclick="showParentView('view2a');">view 1 (parent)</button>
-											<button onclick="showSubView('view3');">view 3</button>
+											<button id="btn-view-3">view 3</button>
 										</div>
 										view 2a
 										<div class="info">min-height: 400</div>
 										<d2l-hierarchical-view id="view3">
 											<div style="min-height: 300px;">
 												<div class="buttons">
-													<button onclick="showParentView('view3');">view 2a (parent)</button>
-													<button onclick="showSubView('view4');">view 4</button>
+													<button id="btn-parent-view-3">view 2a (parent)</button>
+													<button id="btn-view-4">view 4</button>
 												</div>
 												view 3
 												<div class="info">min-height: 300</div>
 												<d2l-hierarchical-view id="view4">
 													<div style="min-height: 300px;">
 														<div class="buttons">
-															<button onclick="showParentView('view4');">view 3 (parent)</button>
+															<button id="btn-parent-view-4">view 3 (parent)</button>
 														</div>
 														view 4
 														<div class="info">min-height: 300</div>
@@ -120,7 +120,7 @@ document.body.appendChild($_documentContainer.content);
 								<d2l-hierarchical-view id="view2b">
 									<div style="min-height: 200px;">
 										<div class="buttons">
-											<button onclick="showParentView('view2b');">view 1 (parent)</button>
+											<button id="btn-parent-view-2b">view 1 (parent)</button>
 										</div>
 										view 2b
 										<div class="info">min-height: 200</div>
@@ -134,9 +134,10 @@ document.body.appendChild($_documentContainer.content);
 
 		</div>
 		<script type="module">
+/* global showSubView showParentView appendContent */
 import { dom } from '../../@polymer/polymer/lib/legacy/polymer.dom.js';
 
-window.addEventListener('WebComponentsReady', function(e) {
+window.addEventListener('WebComponentsReady', function() {
 	var focusFirstButton = function(e) {
 		var button = e.detail.activeView.querySelector('button');
 		if (button) {
@@ -152,7 +153,7 @@ window.addEventListener('WebComponentsReady', function(e) {
 	});
 	var config_buttons = document.getElementById('config_buttons');
 	var views = document.querySelectorAll('d2l-hierarchical-view');
-	for (var i=0; i<views.length; i++) {
+	for (var i = 0; i < views.length; i++) {
 		var button = document.createElement('button');
 		button.appendChild(document.createTextNode('show ' + views[i].id));
 		button.setAttribute('data-view-id', views[i].id);
@@ -161,6 +162,30 @@ window.addEventListener('WebComponentsReady', function(e) {
 		});
 		config_buttons.appendChild(button);
 	}
+});
+document.getElementById('btn-view-2a').addEventListener('click', function() {
+	showSubView('view2a');
+});
+document.getElementById('btn-view-2b').addEventListener('click', function() {
+	showSubView('view2b');
+});
+document.getElementById('btn-view-3').addEventListener('click', function() {
+	showSubView('view3');
+});
+document.getElementById('btn-view-4').addEventListener('click', function() {
+	showSubView('view4');
+});
+document.getElementById('btn-parent-view-3').addEventListener('click', function() {
+	showParentView('view3');
+});
+document.getElementById('btn-parent-view-4').addEventListener('click', function() {
+	showParentView('view4');
+});
+document.getElementById('btn-parent-view-2b').addEventListener('click', function() {
+	showParentView('view2b');
+});
+document.getElementById('btn-append-content').addEventListener('click', function() {
+	appendContent('view1');
 });
 
 window.showSubView = function showSubView(id) {

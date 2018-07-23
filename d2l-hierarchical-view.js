@@ -11,7 +11,13 @@ Polymer-based web component for nested views
 */
 Polymer({
 	_template: html`
-		<style include="d2l-hierarchical-view-styles"></style>
+		<style include="d2l-hierarchical-view-styles">
+			/*
+			 * https://github.com/Polymer/tools/issues/408
+			 * Empty style blocks break linter.
+			 */
+			:host {}
+		</style>
 		<div class="d2l-hierarchical-view-content">
 			<slot></slot>
 		</div>
