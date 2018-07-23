@@ -1,24 +1,41 @@
 {
-  "name": "d2l-hierarchical-view",
-  "private": true,
   "description": "Polymer-based web component for nested views",
-  "scripts": {
-    "postinstall": "polymer install --variants",
-    "test": "npm run test:lint:js && npm run test:lint:wc",
-    "test:lint:js": "eslint *.html",
-    "test:lint:wc": "polymer lint -i *.html",
-    "test:unit:local": "polymer test --skip-plugin sauce"
-  },
   "repository": {
     "type": "git",
     "url": "https://github.com/BrightspaceUI/hierarchical-view.git"
   },
+  "name": "d2l-hierarchical-view",
+  "scripts": {
+    "test": "npm run test:lint:js && npm run test:lint:wc",
+    "test:lint:js": "eslint *.js *.html",
+    "test:lint:wc": "polymer lint --npm *.js",
+    "test:unit:local": "polymer test --npm --skip-plugin sauce"
+  },
   "author": "D2L Corporation",
   "license": "Apache-2.0",
   "devDependencies": {
+    "@polymer/iron-component-page": "^3.0.0-pre.18",
+    "@polymer/iron-demo-helpers": "^3.0.0-pre.18",
+    "@polymer/iron-test-helpers": "^3.0.0-pre.18",
+    "@webcomponents/webcomponentsjs": "^2.0.2",
+    "babel-eslint": "^8.2.5",
     "eslint": "^4.15.0",
     "eslint-config-brightspace": "^0.4.0",
     "eslint-plugin-html": "^4.0.1",
-    "polymer-cli": "^1.5.7"
+    "wct-browser-legacy": "^0.0.1-pre.11"
+  },
+  "version": "2.0.0",
+  "resolutions": {
+    "inherits": "2.0.3",
+    "samsam": "1.1.3",
+    "supports-color": "3.1.2",
+    "type-detect": "1.0.0",
+    "@webcomponents/webcomponentsjs": "2.0.0-beta.2"
+  },
+  "main": "d2l-hierarchical-view.js",
+  "dependencies": {
+    "@polymer/polymer": "^3.0.0",
+    "d2l-polymer-behaviors": "git+https://github.com/Brightspace/d2l-polymer-behaviors-ui.git#polymer-3.x",
+    "d2l-typography": "git+https://github.com/BrightspaceUI/typography.git#polymer-3"
   }
 }
