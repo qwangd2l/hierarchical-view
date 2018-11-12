@@ -4,11 +4,6 @@ Polymer-based web component for nested views
 
 @demo demo/index.html
 */
-/*
-  FIXME(polymer-modulizer): the above comments were extracted
-  from HTML and may be out of place here. Review them and
-  then delete this comment!
-*/
 import '../@polymer/polymer/polymer-legacy.js';
 
 import './d2l-hierarchical-view-behavior.js';
@@ -30,7 +25,7 @@ $_documentContainer.innerHTML = `<dom-module id="d2l-hierarchical-view">
 		</div>
 	</template>
 
-	
+
 
 </dom-module>`;
 
