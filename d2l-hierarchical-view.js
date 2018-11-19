@@ -30,8 +30,6 @@ $_documentContainer.innerHTML = `<dom-module id="d2l-hierarchical-view">
 		</div>
 	</template>
 
-	
-
 </dom-module>`;
 
 document.head.appendChild($_documentContainer.content);
