@@ -9,7 +9,6 @@ import '../d2l-hierarchical-view.js';
 class DemoElement extends PolymerElement {
 	static get template() {
 		return html`
-
 			<custom-style>
 				<style is="custom-style" include="demo-pages-shared-styles"></style>
 			</custom-style>
@@ -62,12 +61,13 @@ class DemoElement extends PolymerElement {
 					font-size: 0.7rem;
 				}
 			</style>
-			<div class="vertical-section-container centered">
+			<div class="vertical-section-container centered d2l-typography">
 
 				<h3>Hierarchical View</h3>
 				<div id="config_buttons">
 					<button id="btn-append-content">Append Content</button>
 				</div>
+				<demo-snippet>
 
 						<d2l-hierarchical-view id="view1">
 							<div style="min-height: 200px;">
@@ -120,86 +120,78 @@ class DemoElement extends PolymerElement {
 							</div>
 						</d2l-hierarchical-view>
 
+				</demo-snippet>
 			</div>
 		`;
 	}
 
 	ready() {
 		super.ready();
+		const that = this;
+		var focusFirstButton = function(e) {
+			var button = e.detail.activeView.querySelector('button');
+			if (button) {
+				button.focus();
+			}
+		};
 
-		// var focusFirstButton = function(e) {
-		// 	var button = e.detail.activeView.querySelector('button');
-		// 	if (button) {
-		// 		button.focus();
-		// 	}
-		// };
+		var rootView = this.shadowRoot.querySelector('#view1');
 
-		// var rootView = document.getElementById('view1');
-		// var rootView = this.shadowRoot.querySelector('#view1');
-		// console.log('rootView:', rootView);
+		rootView.addEventListener('d2l-hierarchical-view-show-complete', function(e) {
+			focusFirstButton(e);
+		});
+		rootView.addEventListener('d2l-hierarchical-view-hide-complete', function(e) {
+			focusFirstButton(e);
+		});
 
-		// rootView.addEventListener('d2l-hierarchical-view-show-complete', function(e) {
-		// 	focusFirstButton(e);
-		// });
-		// rootView.addEventListener('d2l-hierarchical-view-hide-complete', function(e) {
-		// 	focusFirstButton(e);
-		// });
-
-		// var config_buttons = document.getElementById('config_buttons');
 		var config_buttons = this.shadowRoot.querySelector('#config_buttons');
-		console.log('>> config_buttons:', config_buttons);
-		// var views = document.querySelectorAll('d2l-hierarchical-view');
 		var views = this.shadowRoot.querySelectorAll('d2l-hierarchical-view');
-		console.log('>> views:', views);
 
 		for (var i = 0; i < views.length; i++) {
 			var button = document.createElement('button');
 			button.appendChild(document.createTextNode('show ' + views[i].id));
 			button.setAttribute('data-view-id', views[i].id);
 			button.addEventListener('click', function(e) {
-				// document.getElementById(e.target.getAttribute('data-view-id')).show();
-				this.shadowRoot.querySelector(`#${e.target.getAttribute('data-view-id')}`).show();
-			}.bind(this));
+				that.shadowRoot.querySelector(`#${e.target.getAttribute('data-view-id')}`).show();
+			});
 			config_buttons.appendChild(button);
 		}
 
 		this.shadowRoot.querySelector('#btn-view-2a').addEventListener('click', function() {
-			this.showSubView('view2a');
-		}.bind(this));
-		// document.getElementById('btn-view-2b').addEventListener('click', function() {
-		// 	showSubView('view2b');
-		// });
-		// document.getElementById('btn-view-3').addEventListener('click', function() {
-		// 	showSubView('view3');
-		// });
-		// document.getElementById('btn-view-4').addEventListener('click', function() {
-		// 	showSubView('view4');
-		// });
+			that.showSubView('view2a');
+		});
+		this.shadowRoot.querySelector('#btn-view-2b').addEventListener('click', function() {
+			that.showSubView('view2b');
+		});
+		this.shadowRoot.querySelector('#btn-view-3').addEventListener('click', function() {
+			that.showSubView('view3');
+		});
+		this.shadowRoot.querySelector('#btn-view-4').addEventListener('click', function() {
+			that.showSubView('view4');
+		});
 		this.shadowRoot.querySelector('#btn-parent-view-2a').addEventListener('click', function() {
-			this.showParentView('view2a');
-		}.bind(this));
-		// document.getElementById('btn-parent-view-3').addEventListener('click', function() {
-		// 	showParentView('view3');
-		// });
-		// document.getElementById('btn-parent-view-4').addEventListener('click', function() {
-		// 	showParentView('view4');
-		// });
-		// document.getElementById('btn-parent-view-2b').addEventListener('click', function() {
-		// 	showParentView('view2b');
-		// });
+			that.showParentView('view2a');
+		});
+		this.shadowRoot.querySelector('#btn-parent-view-3').addEventListener('click', function() {
+			that.showParentView('view3');
+		});
+		this.shadowRoot.querySelector('#btn-parent-view-4').addEventListener('click', function() {
+			that.showParentView('view4');
+		});
+		this.shadowRoot.querySelector('#btn-parent-view-2b').addEventListener('click', function() {
+			that.showParentView('view2b');
+		});
 		this.shadowRoot.querySelector('#btn-append-content').addEventListener('click', function() {
-			this.appendContent('view1');
-		}.bind(this));
+			that.appendContent('view1');
+		});
 	}
 
 	showSubView(id) {
-		// var view = document.getElementById(id);
 		var view = this.shadowRoot.querySelector(`#${id}`);
 		view.show();
 	}
 
 	showParentView(id) {
-		// var view = document.getElementById(id);
 		var view = this.shadowRoot.querySelector(`#${id}`);
 		view.hide();
 	}
@@ -208,7 +200,6 @@ class DemoElement extends PolymerElement {
 		var content = document.createElement('div');
 		content.className = 'content';
 		content.appendChild(document.createTextNode('Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.'));
-		// var view = document.getElementById(id);
 		var view = this.shadowRoot.querySelector(`#${id}`);
 		var activeView = view.getActiveView();
 		dom(activeView).appendChild(content);
